@@ -1,20 +1,23 @@
+from config import Config
 from datetime import datetime
 import pandas as pd
 from pathlib import Path
-from waterboards import get_wb_params, seasons
+from waterboards import get_wb_params
 
 
-def process_flushing(
-    fn_path: str | Path, output_fn: str | Path, inlaat_measurements: str = None
+def process_flush(
+    fn_path: str | Path, output_fn: str | Path, inlaat_measurements: str | Path = None, summer_months = list, winter_months = list
 ):
     """Prepare the total flushing in miljoen m3 depending on the season and water board. This calculation is based on a model and not measured in on of the waterboards.
     This may be different in your case.
 
 
     Args:
-        fn_path (str): file path to the water boards parameters
+        fn_path (str | Path): file path to the water boards parameters
         output_fn (str | Path): file path to where to store the output file
-        inlaat_measurements (str) | None: file path to timeseries of inlaat measurements in m3. All waterboards in one file.
+        inlaat_measurements (str | Path) | None: file path to timeseries of inlaat measurements in m3. All waterboards in one file.
+        summer_months (list): A list of months which are considered to be summer
+        winter_months (list): A list of months which are considered to be winter
     Returns
     -------
         total_flushing: VZM total flushing volume miljoen m3 per dag
@@ -40,11 +43,11 @@ def process_flushing(
         for idx, row in flushing_df.iterrows():
             # Calculate flushing based on season
             date_object = datetime.strptime(row["DATUM"], "%d-%m-%Y").date()
-            if date_object.strftime("%B") in seasons.summer_months:
+            if date_object.strftime("%B") in summer_months:
                 flushing = (
                     10 * summer_flushing * area / days
                 ) / 1000000  # Calculation from Excel water boards
-            elif date_object.strftime("%B") in seasons.winter_months:
+            elif date_object.strftime("%B") in winter_months:
                 flushing = (
                     winter_flushing / 1000000
                 )  # Calculation from Excel water boards
@@ -77,3 +80,14 @@ def process_flushing(
         f.write("* period 2010 t/m 2018\n")
         f.write("*DATUM WAARDE\n")
         wb_flushings_df[["DATUM", "sum"]].to_csv(f, sep=" ", index=False, header=False)
+
+def process_flushing(fn_path: str):
+    """Processes flushing for the VZM.
+    Args:
+        fn_path (str | Path): file path to the water boards parameters
+    """
+    config = Config.load()
+    output_fn = config.output.output
+    summer = config.season.summer_months
+    winter = config.season.winter_months
+    process_flush(fn_path, output_fn, summer_months = summer, winter_months = winter)
