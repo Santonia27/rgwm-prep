@@ -4,7 +4,7 @@ import pandas as pd
 from datetime import datetime
 
 
-## Afvoer 
+## Afvoer
 def process_aanvoer_discharge(fn_path: str):
     """Get the aanvoer discharge per sluis in Q in miljoen m3 per dag
         VZM include the following afvoer sluises:
@@ -12,48 +12,51 @@ def process_aanvoer_discharge(fn_path: str):
             - Volkerak spuisluizen gat 2 + gat 3
             - Dintelsas
             - Bovensas 10 % percentage extra op Bovensas afvoer
-            
+
     Args:
         fn_path (str): file path to the aanvoer discharge time series per sluises in m3 per day
 
     Returns
     -------
         aanvoer_per_sluis_df: aanvoer discharge per sluis in Q in miljoen m3 per dag
-    """ 
-    for file in glob.glob(f"{fn_path}/*"):    
-        if file.endswith(".csv") and 'IN' in file:
+    """
+    for file in glob.glob(f"{fn_path}/*"):
+        if file.endswith(".csv") and "IN" in file:
             fn = Path(file)
             name = fn.stem.split("discharge_")[-1]
-            discharge_timeseries_df = pd.read_csv(file, sep = ";")
-            discharge_timeseries_df["WAARDE"] = discharge_timeseries_df["WAARDE"].astype(float)
-            
+            discharge_timeseries_df = pd.read_csv(file, sep=";")
+            discharge_timeseries_df["WAARDE"] = discharge_timeseries_df[
+                "WAARDE"
+            ].astype(float)
+
             # Add 10 % to Bovensas
             if "Bovensas" in name:
                 discharge_timeseries_df["WAARDE"] * 1.10
-                
+
             for idx, row in discharge_timeseries_df.iterrows():
-            # Adjust datetime format
-                date_object = datetime.strptime(row["DATUM"], '%d-%m-%Y').date()
-                rev_date_object = date_object.strftime('%Y-%m-%d')
+                # Adjust datetime format
+                date_object = datetime.strptime(row["DATUM"], "%d-%m-%Y").date()
+                rev_date_object = date_object.strftime("%Y-%m-%d")
                 new_date = str(rev_date_object).replace("-", "")
                 discharge_timeseries_df.loc[idx, "DATUM"] = new_date
-            # Convert m3 to miljoen m3
+                # Convert m3 to miljoen m3
                 new_volume = row["WAARDE"] / 1000000
-                discharge_timeseries_df.loc[idx, "WAARDE"] = round(new_volume,4)
-                
+                discharge_timeseries_df.loc[idx, "WAARDE"] = round(new_volume, 4)
+
             aanvoer_per_sluis_df = discharge_timeseries_df
-            
+
             # Save .VZM input file
             output = f"../../output/VZM_{name}_IN_discharge" + ".VZM"
-            
+
             with open(output, "w") as f:
                 f.write(f"{name}\n")
                 f.write("* Q in miljoen m3 per dag\n")
-                f.write("* periode 2010 t/m 2018\n")
+                f.write("* period 2010 t/m 2018\n")
                 f.write("*DATUM WAARDE\n")
-                aanvoer_per_sluis_df.to_csv(f, sep = " ", index = False, header = False)
-        
-def process_afvoer_discharge(fn_path: str): 
+                aanvoer_per_sluis_df.to_csv(f, sep=" ", index=False, header=False)
+
+
+def process_afvoer_discharge(fn_path: str):
     """Get the afvoer discharge per sluis in Q in miljoen m3 per dag
         VZM include the following afvoer sluises:
             - Bathse spuisluis gecorrigeerd
@@ -65,40 +68,43 @@ def process_afvoer_discharge(fn_path: str):
     Returns
     -------
         afvoer_per_sluis_df: avfoer discharge per sluis in Q in miljoen m3 per dag
-    """ 
-    for file in glob.glob(f"{fn_path}/*"):    
-        if file.endswith(".csv") and 'OUT' in file:
+    """
+    for file in glob.glob(f"{fn_path}/*"):
+        if file.endswith(".csv") and "OUT" in file:
             fn = Path(file)
             name = fn.stem.split("discharge_")[-1]
-            discharge_timeseries_df = pd.read_csv(file, sep = ";")
-            discharge_timeseries_df["WAARDE"] = discharge_timeseries_df["WAARDE"].astype(float)   
-            
+            discharge_timeseries_df = pd.read_csv(file, sep=";")
+            discharge_timeseries_df["WAARDE"] = discharge_timeseries_df[
+                "WAARDE"
+            ].astype(float)
+
             for idx, row in discharge_timeseries_df.iterrows():
-            # Adjust datetime format
-                date_object = datetime.strptime(row["DATUM"], '%d-%m-%Y').date()
-                rev_date_object = date_object.strftime('%Y-%m-%d')
+                # Adjust datetime format
+                date_object = datetime.strptime(row["DATUM"], "%d-%m-%Y").date()
+                rev_date_object = date_object.strftime("%Y-%m-%d")
                 new_date = str(rev_date_object).replace("-", "")
                 discharge_timeseries_df.loc[idx, "DATUM"] = new_date
-            # Convert m3 to miljoen m3
+                # Convert m3 to miljoen m3
                 new_volume = row["WAARDE"] / 1000000
-                discharge_timeseries_df.loc[idx, "WAARDE"] = round(new_volume,4)
-                
+                discharge_timeseries_df.loc[idx, "WAARDE"] = round(new_volume, 4)
+
             afvoer_per_sluis_df = discharge_timeseries_df
-            
+
             # Save .VZM input file
             output = f"../../output/VZM_{name}_OUT_discharge" + ".VZM"
-            
+
             with open(output, "w") as f:
                 f.write(f"{name}\n")
                 f.write("* Q in miljoen m3 per dag\n")
-                f.write("* periode 2010 t/m 2018\n")
+                f.write("* period 2010 t/m 2018\n")
                 f.write("*DATUM WAARDE\n")
-                afvoer_per_sluis_df.to_csv(f, sep = " ", index = False, header = False)
-                
-def process_discharge(fn_path: str): 
+                afvoer_per_sluis_df.to_csv(f, sep=" ", index=False, header=False)
+
+
+def process_discharge(fn_path: str):
     """Processes afvoer and aanvoer from the VZM sluises
     Args:
         fn_path (str): file path to the discharge time series per sluises in m3 per day
-    """ 
+    """
     process_afvoer_discharge(fn_path)
     process_aanvoer_discharge(fn_path)
