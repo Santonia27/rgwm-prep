@@ -1,0 +1,12 @@
+[timeseries]
+meteo = "P:/11212800-002/2. Calculations/reproduction_volkerak_2018/input/meteo"
+discharge = "P:/11212800-002/2. Calculations/reproduction_volkerak_2018/input/discharge"
+pumps = "P:/11212800-002/2. Calculations/reproduction_volkerak_2018/input/pumps"
+flushing =  "P:/11212800-002/2. Calculations/reproduction_volkerak_2018/input/waterboards"
+
+[season]
+summer_months = ["April", "May", "June", "July", "August", "September"]
+winter_months = ["October","November","December","January","February","March"]
+
+[output]
+output = "P:/11212800-002/2. Calculations/reproduction_volkerak_2018/output"

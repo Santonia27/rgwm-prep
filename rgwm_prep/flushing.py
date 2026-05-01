@@ -4,13 +4,16 @@ from pathlib import Path
 from waterboards import get_wb_params, seasons
 
 
-def process_flushing(fn_path: str, inlaat_measurements: str = None):
+def process_flushing(
+    fn_path: str | Path, output_fn: str | Path, inlaat_measurements: str = None
+):
     """Prepare the total flushing in miljoen m3 depending on the season and water board. This calculation is based on a model and not measured in on of the waterboards.
     This may be different in your case.
 
 
     Args:
         fn_path (str): file path to the water boards parameters
+        output_fn (str | Path): file path to where to store the output file
         inlaat_measurements (str) | None: file path to timeseries of inlaat measurements in m3. All waterboards in one file.
     Returns
     -------
@@ -66,7 +69,7 @@ def process_flushing(fn_path: str, inlaat_measurements: str = None):
         wb_flushings_df.loc[idx, "DATUM"] = new_date
 
     # Save .VZM input file
-    output = "../../output/VZM_inlaat_flushings" + ".VZM"
+    output = output_fn / "VZM_inlaat_flushings.VZM"
 
     with open(output, "w") as f:
         f.write("Afvoer Inlaat doorspoeling WBs\n")

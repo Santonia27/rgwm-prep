@@ -1,3 +1,4 @@
+from config import Config
 import glob
 from pathlib import Path
 import pandas as pd
@@ -5,7 +6,7 @@ from datetime import datetime
 
 
 ## Afvoer
-def process_aanvoer_discharge(fn_path: str):
+def process_aanvoer_discharge(fn_path: str | Path, output_fn: str | Path):
     """Get the aanvoer discharge per sluis in Q in miljoen m3 per dag
         VZM include the following afvoer sluises:
         Volkerak spuisluizen gat 2 + gat 3
@@ -14,7 +15,8 @@ def process_aanvoer_discharge(fn_path: str):
             - Bovensas 10 % percentage extra op Bovensas afvoer
 
     Args:
-        fn_path (str): file path to the aanvoer discharge time series per sluises in m3 per day
+        fn_path (str | Path): file path to the aanvoer discharge time series per sluises in m3 per day
+        output_fn (str | Path): file path to where to store the output file
 
     Returns
     -------
@@ -46,7 +48,7 @@ def process_aanvoer_discharge(fn_path: str):
             aanvoer_per_sluis_df = discharge_timeseries_df
 
             # Save .VZM input file
-            output = f"../../output/VZM_{name}_IN_discharge" + ".VZM"
+            output = output_fn / "VZM_{name}_IN_discharge.VZM"
 
             with open(output, "w") as f:
                 f.write(f"{name}\n")
@@ -56,14 +58,15 @@ def process_aanvoer_discharge(fn_path: str):
                 aanvoer_per_sluis_df.to_csv(f, sep=" ", index=False, header=False)
 
 
-def process_afvoer_discharge(fn_path: str):
+def process_afvoer_discharge(fn_path: str | Path, output_fn: str | Path):
     """Get the afvoer discharge per sluis in Q in miljoen m3 per dag
         VZM include the following afvoer sluises:
             - Bathse spuisluis gecorrigeerd
             - Krammer
             - Kreekrak
     Args:
-        fn_path (str): file path to the afvoer discharge time series per sluises in m3 per day
+        fn_path (str | Path): file path to the afvoer discharge time series per sluises in m3 per day
+        output_fn (str | Path): file path to where to store the output file
 
     Returns
     -------
@@ -91,7 +94,7 @@ def process_afvoer_discharge(fn_path: str):
             afvoer_per_sluis_df = discharge_timeseries_df
 
             # Save .VZM input file
-            output = f"../../output/VZM_{name}_OUT_discharge" + ".VZM"
+            output = output_fn / "VZM_{name}_OUT_discharge.VZM"
 
             with open(output, "w") as f:
                 f.write(f"{name}\n")
@@ -101,10 +104,13 @@ def process_afvoer_discharge(fn_path: str):
                 afvoer_per_sluis_df.to_csv(f, sep=" ", index=False, header=False)
 
 
-def process_discharge(fn_path: str):
+def process_discharge(fn_path: str | Path):
     """Processes afvoer and aanvoer from the VZM sluises
     Args:
-        fn_path (str): file path to the discharge time series per sluises in m3 per day
+        fn_path (str | Path): file path to the discharge time series per sluises in m3 per day
     """
-    process_afvoer_discharge(fn_path)
-    process_aanvoer_discharge(fn_path)
+    config = Config.load()
+    output_fn = config.output.output
+
+    process_afvoer_discharge(fn_path, output_fn)
+    process_aanvoer_discharge(fn_path, output_fn)

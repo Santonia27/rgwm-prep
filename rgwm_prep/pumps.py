@@ -1,10 +1,11 @@
+from config import Config
 import glob
 from pathlib import Path
 import pandas as pd
 from datetime import datetime
 
 
-def process_aanvoer_pump(fn_path: str):
+def process_aanvoer_pump(fn_path: str | Path, output_fn: str | Path):
     """Get the pump volume in Q in miljoen m3/dag per pump
         VZM include the following pump stations:
             - Bathse spuisluis gecorrigeerd
@@ -12,6 +13,7 @@ def process_aanvoer_pump(fn_path: str):
             - Kreekrak
     Args:
         fn_path (str): file path to the pump time series in XYZ per day
+        output_fn (str | Path): file path to where to store the output file
 
     Returns
     -------
@@ -34,7 +36,7 @@ def process_aanvoer_pump(fn_path: str):
 
             aanvoer_per_pump_df = pump_timeseries_df
             # Save .VZM input file
-            output = f"../../output/VZM_{name}" + ".VZM"
+            output = output_fn / "VZM_{name}.VZM"
 
             with open(output, "w") as f:
                 f.write(f"{name}\n")
@@ -44,9 +46,12 @@ def process_aanvoer_pump(fn_path: str):
                 aanvoer_per_pump_df.to_csv(f, sep=" ", index=False, header=False)
 
 
-def process_pumps(fn_path: str):
+def process_pumps(fn_path: str | Path):
     """Processes afvoer and aanvoer from the VZM pumps
     Args:
-        fn_path (str): file path to the pump time series in Q in miljoen m3 per day
+        fn_path (str: Path): file path to the pump time series in Q in miljoen m3 per day
     """
-    process_aanvoer_pump(fn_path)
+    config = Config.load()
+    output_fn = config.output.output
+
+    process_aanvoer_pump(fn_path, output_fn)

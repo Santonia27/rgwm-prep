@@ -1,4 +1,5 @@
 # Load packages
+from config import Config
 import glob
 from pathlib import Path
 import pandas as pd
@@ -8,7 +9,9 @@ from datetime import datetime
 # NOTE! Precipitation must be adjusted to the sub-area and an average is taken from all stations/sub-areas
 
 
-def process_precipitation(fn_path: str, total_area: int = 6000):
+def process_precipitation(
+    fn_path: str | Path, output_fn: str | Path, total_area: int = 6000
+):
     """Get the precipitation per station and calculate average daily precipitation for the VZM in XY. #NOTE STILL writ here
         VZM sub-areas include the following stations:
             sub-area 1 stations: 447, 450, 744, 837. Area-factor: 6217 #NOTE! Not sure if this is area or something else
@@ -16,13 +19,15 @@ def process_precipitation(fn_path: str, total_area: int = 6000):
             sub-area 3 stations: 832. Area-factor: 1122 #NOTE! Not sure if this is area or something else
             sub-area 4 stations: 750, 839. Area-factor: 96 #NOTE! Not sure if this is area or something else
     Args:
-        fn_path (str): file path to the precipitation time series files per station in mm per day
+        fn_path (str | Path): file path to the precipitation time series files per station in mm per day
+        output_fn (str | Path): file path to where to store the output file
         total_area (int): total area of VZM in ha. Default set to 6000 ha
 
     Returns
     -------
         total_prec: sub-area averaged daily precipitation volume for total VZM in miljoen m3
     """
+
     stations_dict = {}
     for file in glob.glob(f"{fn_path}/*"):
         if file.endswith(".csv") and "precipitation" in file:
@@ -70,7 +75,7 @@ def process_precipitation(fn_path: str, total_area: int = 6000):
         total_prec_df.loc[idx, "WAARDE"] = round(volume, 4)
 
     # Save .VZM input file
-    output = "../../output/VZM_total_precipitation" + ".VZM"
+    output = output_fn / "VZM_total_precipitation.VZM"
 
     with open(output, "w") as f:
         f.write("Neerslag\n")
@@ -81,12 +86,18 @@ def process_precipitation(fn_path: str, total_area: int = 6000):
 
 
 ## Evaporation
-def process_evaporation(fn_path: str, total_area: int = 6000, ow_factor: float = 1.25):
+def process_evaporation(
+    fn_path: str | Path,
+    output_fn: str | Path,
+    total_area: int = 6000,
+    ow_factor: float = 1.25,
+):
     """Get the evaporation per station and calculate the open water evaporation using factor 1.25
         VZM include the following stations:
             area 1 stations: 310
     Args:
-        fn_path (str): file path to the evaporation time series files per station in mm per day
+        fn_path (str | Path): file path to the evaporation time series files per station in mm per day
+        output_fn (str | Path): file path to where to store the output file
         total_area (int): total area of VZM in ha. Default set to 6000 ha
         ow_factor (float): Conversion factor from station evaporation to open water evaporation. Default set to 1.25
 
@@ -94,6 +105,7 @@ def process_evaporation(fn_path: str, total_area: int = 6000, ow_factor: float =
     -------
         ow_evap: open water evaporation for total VZM in miljoen m3
     """
+
     stations_dict = {}
 
     for file in glob.glob(f"{fn_path}/*"):
@@ -121,7 +133,7 @@ def process_evaporation(fn_path: str, total_area: int = 6000, ow_factor: float =
         ow_evap_df.loc[idx, "WAARDE"] = round(volume, 4)
 
     # Save .VZM input file
-    output = "../../output/VZM_ow_evaporation" + ".VZM"
+    output = output_fn / "VZM_ow_evaporation.VZM"
 
     with open(output, "w") as f:
         f.write("Verdamping\n")
@@ -134,9 +146,11 @@ def process_evaporation(fn_path: str, total_area: int = 6000, ow_factor: float =
 def process_meteo(fn_path: str, total_area: int = 6000, ow_factor: float = 1.25):
     """Processes precipitation and evaporation from the VZM stations.
     Args:
-        fn_path (str): file path to the meteo time series files per station in mm per day
+        fn_path (str | Path): file path to the meteo time series files per station in mm per day
         total_area (int): total area of VZM in ha. Default set to 6000 ha
         ow_factor (float): Conversion factor from station evaporation to open water evaporation. Default set to 1.25
     """
-    process_precipitation(fn_path, total_area)
-    process_evaporation(fn_path, total_area, ow_factor)
+    config = Config.load()
+    output_fn = config.output.output
+    process_precipitation(fn_path, output_fn, total_area)
+    process_evaporation(fn_path, output_fn, total_area, ow_factor)
