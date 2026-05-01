@@ -3,11 +3,14 @@ from pydantic import BaseModel
 import tomllib
 
 
-class TimeSeriesConfig(BaseModel):
-    meteo: Path
-    discharge: Path
-    pumps: Path
-    flushing: Path
+class ConstFluxesConfig(BaseModel):
+    leakage = Path
+    lock_operations = Path
+    up_grndwater_flux = Path
+
+
+class OutputConfig(BaseModel):
+    output: Path
 
 
 class SeasonConfig(BaseModel):
@@ -15,14 +18,18 @@ class SeasonConfig(BaseModel):
     winter_months: list
 
 
-class OutputConfig(BaseModel):
-    output: Path
+class TimeSeriesConfig(BaseModel):
+    meteo: Path
+    discharge: Path
+    pumps: Path
+    flushing: Path
 
 
 class Config(BaseModel):
     timeseries: TimeSeriesConfig
     season: SeasonConfig
     output: OutputConfig
+    const_fluxes: ConstFluxesConfig
 
     @classmethod
     def load(cls, path: Path = Path("config.toml")) -> "Config":

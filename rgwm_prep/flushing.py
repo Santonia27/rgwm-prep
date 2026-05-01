@@ -2,11 +2,15 @@ from config import Config
 from datetime import datetime
 import pandas as pd
 from pathlib import Path
-from waterboards import get_wb_params
+from rgwm_prep.utils import get_wb_params
 
 
 def process_flush(
-    fn_path: str | Path, output_fn: str | Path, inlaat_measurements: str | Path = None, summer_months = list, winter_months = list
+    fn_path: str | Path,
+    output_fn: str | Path,
+    inlaat_measurements: str | Path = None,
+    summer_months=list,
+    winter_months=list,
 ):
     """Prepare the total flushing in miljoen m3 depending on the season and water board. This calculation is based on a model and not measured in on of the waterboards.
     This may be different in your case.
@@ -59,7 +63,7 @@ def process_flush(
 
     # aggregate flushing from all sub-areas in the waterboard
     if inlaat_measurements:
-        total_flushing = (
+        wb_flushings_df = (
             inlaat_measurements / 1000000
         )  # NOTE! This may need adaptation if measurements are available
     else:
@@ -81,6 +85,7 @@ def process_flush(
         f.write("*DATUM WAARDE\n")
         wb_flushings_df[["DATUM", "sum"]].to_csv(f, sep=" ", index=False, header=False)
 
+
 def process_flushing(fn_path: str):
     """Processes flushing for the VZM.
     Args:
@@ -90,4 +95,4 @@ def process_flushing(fn_path: str):
     output_fn = config.output.output
     summer = config.season.summer_months
     winter = config.season.winter_months
-    process_flush(fn_path, output_fn, summer_months = summer, winter_months = winter)
+    process_flush(fn_path, output_fn, summer_months=summer, winter_months=winter)

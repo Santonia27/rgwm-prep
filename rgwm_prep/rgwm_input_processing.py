@@ -3,6 +3,7 @@
 # Function: Converts the csv input files to .mmr input files for the RGWM model
 # --------------------------------------------------------------------------------
 from config import Config
+from constant_fluxes import process_const_fluxes
 from discharges import process_discharge
 from flushing import process_flushing
 from meteo import process_meteo
@@ -28,5 +29,11 @@ if __name__ == "__main__":
     ## can add inlaat measurements if available
     process_flushing(config.timeseries.flushing)
 
+    # Prepare constant fluxes
+    process_const_fluxes(
+        config.const_fluxes.leakage,
+        config.const_fluxes.lock_operations,
+        config.const_fluxes.up_grndwater_flux,
+    )
     # Prepare Berging
     print("All input files were created.")
