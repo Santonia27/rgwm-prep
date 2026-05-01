@@ -22,7 +22,7 @@ class TimeSeriesConfig(BaseModel):
     meteo: Path
     discharge: Path
     pumps: Path
-    flushing: Path
+    params: Path
 
 
 class Config(BaseModel):

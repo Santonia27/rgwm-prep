@@ -36,7 +36,7 @@ def process_aanvoer_pump(fn_path: str | Path, output_fn: str | Path):
                 
             aanvoer_per_pump_df = pump_timeseries_df
             # Save .VZM input file
-            output = output_fn / f"VZM_{name}.VZM"
+            output = output_fn / f"in/VZM_{name}.VZM"
 
             with open(output, "w") as f:
                 f.write(f"{name}\n")

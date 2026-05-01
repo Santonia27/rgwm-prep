@@ -42,7 +42,7 @@ def process_aanvoer_discharge(fn_path: str | Path, output_fn: str | Path):
             aanvoer_per_sluis_df = discharge_timeseries_df
 
             # Save .VZM input file
-            output = output_fn / f"VZM_{name}_IN_discharge.VZM"
+            output = output_fn / f"in/VZM_{name}_IN_discharge.VZM"
 
             with open(output, "w") as f:
                 f.write(f"{name}\n")
@@ -82,7 +82,7 @@ def process_afvoer_discharge(fn_path: str | Path, output_fn: str | Path):
             afvoer_per_sluis_df = discharge_timeseries_df
 
             # Save .VZM input file
-            output = output_fn / f"VZM_{name}_OUT_discharge.VZM"
+            output = output_fn / f"out/VZM_{name}_OUT_discharge.VZM"
 
             with open(output, "w") as f:
                 f.write(f"{name}\n")

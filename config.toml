@@ -2,7 +2,7 @@
 meteo = "examples/reproduction_volkerak_2018//input/meteo"
 discharge = "examples/reproduction_volkerak_2018/input/discharge"
 pumps = "examples/reproduction_volkerak_2018//input/pumps"
-flushing =  "examples/reproduction_volkerak_2018/input/waterboards"
+params =  "examples/reproduction_volkerak_2018/input/params"
 
 [season]
 summer_months = ["April", "May", "June", "July", "August", "September"]

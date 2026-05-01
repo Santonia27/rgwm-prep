@@ -73,7 +73,7 @@ def process_precipitation(
         total_prec_df.loc[idx, "WAARDE"] = round(volume, 4)
 
     # Save .VZM input file
-    output = output_fn / "VZM_total_precipitation.VZM"
+    output = output_fn / "in/VZM_total_precipitation.VZM"
 
     with open(output, "w") as f:
         f.write("Neerslag\n")
@@ -129,7 +129,7 @@ def process_evaporation(
         ow_evap_df.loc[idx, "WAARDE"] = round(volume, 4)
 
     # Save .VZM input file
-    output = output_fn / "VZM_ow_evaporation.VZM"
+    output = output_fn / "out/VZM_ow_evaporation.VZM"
 
     with open(output, "w") as f:
         f.write("Verdamping\n")

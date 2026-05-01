@@ -27,13 +27,13 @@ if __name__ == "__main__":
 
     # Prepare flushing
     ## can add inlaat measurements if available
-    process_flushing(config.timeseries.flushing)
+    #process_flushing(config.timeseries.params)
 
     # Prepare constant fluxes
     process_const_fluxes(
         config.const_fluxes.leakage,
         config.const_fluxes.lock_operations,
-        config.const_fluxes.up_grndwater_flux,
+        config.const_fluxes.up_grndwater_flux, config.timeseries.params
     )
     # Prepare Berging
     print("All input files were created.")

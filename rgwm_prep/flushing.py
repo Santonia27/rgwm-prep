@@ -80,7 +80,7 @@ def process_flush(
         wb_flushings_df.loc[idx, "DATUM"] = new_date
 
     # Save .VZM input file
-    output = output_fn / "VZM_inlaat_flushings.VZM"
+    output = output_fn / "out/VZM_inlaat_flushings.VZM"
 
     with open(output, "w") as f:
         f.write("Afvoer Inlaat doorspoeling WBs\n")
