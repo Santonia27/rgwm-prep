@@ -2,7 +2,7 @@ from config import Config
 import glob
 from pathlib import Path
 import pandas as pd
-from datetime import datetime
+from utils import convert_datetime, convert_m3_to_mil_m3
 
 
 def process_aanvoer_pump(fn_path: str | Path, output_fn: str | Path):
@@ -26,14 +26,14 @@ def process_aanvoer_pump(fn_path: str | Path, output_fn: str | Path):
             pump_timeseries_df = pd.read_csv(file, sep=";")
             # pump_timeseries_df["WAARDE"] = discharge_timeseries_df["WAARDE"].astype(float)
 
+            # Convert datetime format, convert m3 to miljoes m3
+            pump_timeseries_df = convert_datetime(pump_timeseries_df)
+            #pump_timeseries_df = convert_m3_to_mil_m3(pump_timeseries_df) 
+            
             for idx, row in pump_timeseries_df.iterrows():
-                # Adjust datetime format
-                date_object = datetime.strptime(row["DATUM"], "%d-%m-%Y").date()
-                rev_date_object = date_object.strftime("%Y-%m-%d")
-                new_date = str(rev_date_object).replace("-", "")
-                pump_timeseries_df.loc[idx, "DATUM"] = new_date
-            # Convert m3 to miljoen m3
-
+                # Convert m3 to miljoen m3
+                NotImplemented
+                
             aanvoer_per_pump_df = pump_timeseries_df
             # Save .VZM input file
             output = output_fn / f"VZM_{name}.VZM"

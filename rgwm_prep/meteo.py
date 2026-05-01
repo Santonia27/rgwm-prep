@@ -3,7 +3,7 @@ from config import Config
 import glob
 from pathlib import Path
 import pandas as pd
-from datetime import datetime
+from utils import convert_datetime
 
 ## Precipitation
 # NOTE! Precipitation must be adjusted to the sub-area and an average is taken from all stations/sub-areas
@@ -63,13 +63,11 @@ def process_precipitation(
     )
     total_prec_df = total_prec_df.dropna()
 
+    # Convert datetime format
+    total_prec_df = convert_datetime(total_prec_df)
+            
     # Adjust format to model input
     for idx, row in total_prec_df.iterrows():
-        # Adjust datetime format
-        date_object = datetime.strptime(row["DATUM"], "%d-%m-%Y").date()
-        rev_date_object = date_object.strftime("%Y-%m-%d")
-        new_date = str(rev_date_object).replace("-", "")
-        total_prec_df.loc[idx, "DATUM"] = new_date
         # Convert mm/d to miljoen m3
         volume = total_area * row["WAARDE"] * 0.00001
         total_prec_df.loc[idx, "WAARDE"] = round(volume, 4)
@@ -121,13 +119,11 @@ def process_evaporation(
         {"DATUM": stations_dict["310"]["DATUM"], "WAARDE": ow_evap}
     )
     ow_evap_df = ow_evap_df.dropna()
-
+    
+    # Convert datetime format
+    ow_evap_df = convert_datetime(ow_evap_df)
+    
     for idx, row in ow_evap_df.iterrows():
-        # Adjust datetime format
-        date_object = datetime.strptime(row["DATUM"], "%d-%m-%Y").date()
-        rev_date_object = date_object.strftime("%Y-%m-%d")
-        new_date = str(rev_date_object).replace("-", "")
-        ow_evap_df.loc[idx, "DATUM"] = new_date
         # Convert mm/d to miljoen m3
         volume = total_area * row["WAARDE"] * 0.00001
         ow_evap_df.loc[idx, "WAARDE"] = round(volume, 4)

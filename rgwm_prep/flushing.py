@@ -54,9 +54,13 @@ def process_flush(
             elif date_object.strftime("%B") in winter_months:
                 flushing = (
                     winter_flushing / 1000000
-                )  # Calculation from Excel water boards
+                )  # Calculation from Excel water boards 
             else:
-                break
+                raise ValueError(
+                    f"Month '{date_object.strftime("%B")}' (row {idx}, date {row['DATUM']}) "
+                    "is not classified as summer or winter."
+                )
+
             flushing_df.loc[idx, "FLUSHING"] = flushing
 
         wb_flushings_df[waterboard] = flushing_df["FLUSHING"]

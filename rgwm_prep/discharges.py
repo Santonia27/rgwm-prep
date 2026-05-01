@@ -2,7 +2,6 @@ from config import Config
 import glob
 from pathlib import Path
 import pandas as pd
-from datetime import datetime
 from utils import convert_datetime, convert_m3_to_mil_m3
 
 
@@ -36,6 +35,7 @@ def process_aanvoer_discharge(fn_path: str | Path, output_fn: str | Path):
             if "Bovensas" in name:
                 discharge_timeseries_df["WAARDE"] * 1.10
 
+            # Convert datetime format, convert m3 to miljoes m3
             discharge_timeseries_df = convert_datetime(discharge_timeseries_df)
             discharge_timeseries_df = convert_m3_to_mil_m3(discharge_timeseries_df)
 
@@ -75,15 +75,9 @@ def process_afvoer_discharge(fn_path: str | Path, output_fn: str | Path):
                 "WAARDE"
             ].astype(float)
 
-            for idx, row in discharge_timeseries_df.iterrows():
-                # Adjust datetime format
-                date_object = datetime.strptime(row["DATUM"], "%d-%m-%Y").date()
-                rev_date_object = date_object.strftime("%Y-%m-%d")
-                new_date = str(rev_date_object).replace("-", "")
-                discharge_timeseries_df.loc[idx, "DATUM"] = new_date
-                # Convert m3 to miljoen m3
-                new_volume = row["WAARDE"] / 1000000
-                discharge_timeseries_df.loc[idx, "WAARDE"] = round(new_volume, 4)
+            # Convert datetime format, convert m3 to miljoes m3
+            discharge_timeseries_df = convert_datetime(discharge_timeseries_df)
+            discharge_timeseries_df = convert_m3_to_mil_m3(discharge_timeseries_df)
 
             afvoer_per_sluis_df = discharge_timeseries_df
 
