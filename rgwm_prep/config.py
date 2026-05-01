@@ -9,12 +9,15 @@ class TimeSeriesConfig(BaseModel):
     pumps: Path
     flushing: Path
 
+
 class SeasonConfig(BaseModel):
     summer_months: list
     winter_months: list
-    
+
+
 class OutputConfig(BaseModel):
     output: Path
+
 
 class Config(BaseModel):
     timeseries: TimeSeriesConfig
