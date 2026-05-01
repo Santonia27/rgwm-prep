@@ -35,3 +35,18 @@ def convert_datetime(parameter_df: pd.DataFrame) -> pd.DataFrame:
         parameter_df.loc[idx, "DATUM"] = new_date
     
     return parameter_df
+
+def convert_m3_to_mil_m3(parameter_df: pd.DataFrame) -> pd.DataFrame: 
+    """Converts the volume in m3 to miljoes m3
+    Args:
+        parameter_df (pd.DataFrame): Dataframe of the parameter including the "DATUM" (date) and "WAARDE" (param value) column
+    Returns
+    -------
+        parameter_df (pd.DataFrame): Dataframe of the parameter with value in miljoes m3 in "WAARDE" column
+    """
+    # Convert m3 to miljoen m3
+    for idx, row in parameter_df.iterrows():
+                new_volume = row["WAARDE"] / 1000000
+                parameter_df.loc[idx, "WAARDE"] = round(new_volume, 4)
+    
+    return parameter_df

@@ -2,7 +2,7 @@ from config import Config
 from datetime import datetime
 import pandas as pd
 from pathlib import Path
-from rgwm_prep.utils import get_wb_params
+from utils import get_wb_params
 
 
 def process_flush(

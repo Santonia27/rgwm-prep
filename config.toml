@@ -1,17 +1,17 @@
 [timeseries]
-meteo = "../examples/reproduction_volkerak_2018//input/meteo"
-discharge = "../examples/reproduction_volkerak_2018/input/discharge"
-pumps = "../examples/reproduction_volkerak_2018//input/pumps"
-flushing =  "../examples/reproduction_volkerak_2018/input/waterboards"
+meteo = "examples/reproduction_volkerak_2018//input/meteo"
+discharge = "examples/reproduction_volkerak_2018/input/discharge"
+pumps = "examples/reproduction_volkerak_2018//input/pumps"
+flushing =  "examples/reproduction_volkerak_2018/input/waterboards"
 
 [season]
 summer_months = ["April", "May", "June", "July", "August", "September"]
 winter_months = ["October","November","December","January","February","March"]
 
 [output]
-output = "../examples/reproduction_volkerak_2018/output"
+output = "examples/reproduction_volkerak_2018/output"
 
-[constant_fluxes]
-leakage = "../examples/reproduction_volkerak_2018/input/const_fluxes/leakage.csv"
-lock_operations = "../examples/reproduction_volkerak_2018/input/const_fluxes/lock_operations.csv"
-up_grndwater_flux = "../examples/reproduction_volkerak_2018/input/const_fluxes/up_grndwater_flux.csv"
+[const_fluxes]
+leakage = "examples/reproduction_volkerak_2018/input/const_fluxes/leakage.csv"
+lock_operations = "examples/reproduction_volkerak_2018/input/const_fluxes/lock_operations.csv"
+up_grndwater_flux = "examples/reproduction_volkerak_2018/input/const_fluxes/up_grndwater_flux.csv"

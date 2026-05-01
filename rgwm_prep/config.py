@@ -4,9 +4,9 @@ import tomllib
 
 
 class ConstFluxesConfig(BaseModel):
-    leakage = Path
-    lock_operations = Path
-    up_grndwater_flux = Path
+    leakage: Path
+    lock_operations: Path
+    up_grndwater_flux: Path
 
 
 class OutputConfig(BaseModel):
