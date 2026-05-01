@@ -23,7 +23,7 @@ if __name__ == "__main__":
     # Prepare Pumps
     process_pumps(
         r"P:\11212800-002\2. Calculations\reproduction_volkerak_2018\input\pumps"
-    )  # NOTE - wait what time series we can get wether need to calculation or not
+    )  # NOTE - wait what time series we can get whether need to calculation or not
     # NOTE For now take the final sum of excel to validate model
 
     # Prepare flushing
