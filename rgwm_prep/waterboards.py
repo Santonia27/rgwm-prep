@@ -18,15 +18,3 @@ def get_wb_params(fn_path: str):
         wb_params_dict[wb] = wb_dict
 
     return wb_params_dict
-
-
-class seasons:
-    summer_months: list = ["April", "May", "June", "July", "August", "September"]
-    winter_months: list = [
-        "October",
-        "November",
-        "December",
-        "January",
-        "February",
-        "March",
-    ]
