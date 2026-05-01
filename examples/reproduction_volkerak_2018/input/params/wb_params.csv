@@ -1,19 +1,20 @@
-waterboard;long_desc;area_in_ha;summer_flush_6_months;winter_flush_6_months;days;water_area_in_ha;gem_streefpeil_in_m-MV;gemaal_inlaatcapaciteit_in_miljoes_m_d;%-age met wateraanvoer;inlaat_peil
-WB1-1;Bemalingsgebied Flakkee oost, Oude Land van Oude Tonge. Bemalen door gemaal De Haas van Dorsser;2311;100;0;183;;;;;
-WB1-2;Bemalingsgebied Flakkee oost, De Eendracht. Bemalen door gemaal De Eendracht;1579;100;0;183;;;;;
-WB1-3;Bemalingsgebied Flakkee oost, Galathee. Bemalen door gemaal Galathee;1316;100;0;183;;;;;
-WB1-4;Bemalingsgebied Flakkee oost, Oltgensplaat. Bemalen door gemaal Het Oude Land;749;100;0;183;;;;;
-WB2-1;Bemalingsgebied Tholen, Kadijk. Bemalen door gemaal Kadijk (ca 70%) naar De Eendracht en gemaal Poortvlietsedijk (ca 30%) naar Loohoek;1755;0;0;183;;;;;
-WB2-2;Bemalingsgebied Tholen, De Eendracht (+ aanvoer gemaal Kadijk). Bemalen door gemaal De Eendracht (75%) en Drie Grote Polders (25%);1579;401;0;183;;;;;
-WB2-3;Bemalingsgebied Tholen, Drie Grote Polders. Bemalen door gemaal Drie Grote Polders;526;0;0;183;;;;;
-WB2-4;Bemalingsgebied Tholen, Van Haaften. Bemalen door gemaal Van Haaften;547;0;0;183;;;;;
-WB2-5;Bemalingsgebied Tholen, Loohoek. Bemalen door gemaal Loohoek;1764;72;0;183;;;;;
-WB2-6;Bemalingsgebied Tholen, De Noord-Stavenisse. Bemalen door gemaal De Noord-Stavenisse;2883;274;0;183;;;;;
-WB2-7;Bemalingsgebied Tholen, De Noord-StMaartensdijk. Bemalen door gemaal De Noord-StMaartensdijk;1700;158;0;183;;;;;
-WB3-1;Bemalingsgebied St. Philipsland. Bemalen door gemaal De Luyster, lozend op Oosterschelde;1930;200;0;;;;;;
-WB5-1;Bemalingsgebied PAN polders, Prins Hendrik polder (oost). Bemalen door gemaal Prins Hendrik;130;85;0;183;;;;;
-WB5-2;Bemalingsgebied PAN polders, Polders van Nieuw Vossemeer. Bemalen door gemaal Zoute Sluis (en uitwateringssluis);1510;85;0;183;;;;;
-WB5-3;Bemalingsgebied PAN polders, Auvergnepolder. Bemalen door gemaal De Pals;1060;85;0;183;;;;;
-WB6-1;Buitendijkse gebied Volkerak: Niet bemalen, maar vrij afwaterend in- en uitlaat op Volkerak;1734;0;0;183;;;;;
-WB6-2;Buitendijkse gebied Rijn-Schelde-kanaal: Niet bemalen, maar vrij afwaterend in- en uitlaat op Rijn-Schelde-kanaal;471;0;0;183;;;;;
-WB6-3;Buitendijkse gebied Zoommeer: Niet bemalen, maar vrij afwaterend in- en uitlaat opZoommeer;181;0;0;183;;;;;
+waterboard;long_desc;area_in_ha;summer_flush_6_months;winter_flush_6_months;flushing_days;water_area_in_ha;gem_streefpeil_in_m-MV;gemaal_capaciteit_in_m3/min;inlaatcapaciteit_in_m3/min;rel_met_wateraanvoer;inlaat_peil
+WB1-1;Bemalingsgebied Flakkee oost, Oude Land van Oude Tonge. Bemalen door gemaal De Haas van Dorsser;2311;100;0;183;23;1.4;;26.7;0.08;0.05
+WB1-2;Bemalingsgebied Flakkee oost, De Eendracht. Bemalen door gemaal De Eendracht;1579;100;0;183;16;1.4;;34.8;0.76;0.05
+WB1-3;Bemalingsgebied Flakkee oost, Galathee. Bemalen door gemaal Galathee;1316;100;0;183;13;1.35;;36;1;0.05
+WB1-4;Bemalingsgebied Flakkee oost, Oltgensplaat. Bemalen door gemaal Het Oude Land;749;100;0;183;15;1.5;;49.2;1;0.05
+WB2-1;Bemalingsgebied Tholen, Kadijk. Bemalen door gemaal Kadijk (ca 70%) naar De Eendracht en gemaal Poortvlietsedijk (ca 30%) naar Loohoek;1755;0;0;183;86;0.6;;27;1;0.05
+WB2-2;Bemalingsgebied Tholen, De Eendracht (+ aanvoer gemaal Kadijk). Bemalen door gemaal De Eendracht (75%) en Drie Grote Polders (25%);1579;401;0;183;10;1.2;;30;1;0.05
+WB2-3;Bemalingsgebied Tholen, Drie Grote Polders. Bemalen door gemaal Drie Grote Polders;526;0;0;183;25;1.2;;8;1;0.05
+WB2-4;Bemalingsgebied Tholen, Van Haaften. Bemalen door gemaal Van Haaften;547;0;0;183;33;1.5;;8.8;1;0.05
+WB2-5;Bemalingsgebied Tholen, Loohoek. Bemalen door gemaal Loohoek;1764;72;0;183;161;1.2;;20;1;0.05
+WB2-6;Bemalingsgebied Tholen, De Noord-Stavenisse. Bemalen door gemaal De Noord-Stavenisse;2883;274;0;183;129;1.5;;44.8;1;0.05
+WB2-7;Bemalingsgebied Tholen, De Noord-StMaartensdijk. Bemalen door gemaal De Noord-StMaartensdijk;1700;158;0;183;105;1.2;;26.4;1;0.05
+WB3-1;Bemalingsgebied St. Philipsland. Bemalen door gemaal De Luyster, lozend op Oosterschelde;1930;200;0;183;71;1;;22;1;0.05
+WB4-1;Bemalingsgebied Reigersbergse polder: Gemaal ?, lozend op Westerschelde;1248;60;0;183;21;1;;27;1;0.05
+WB5-1;Bemalingsgebied PAN polders, Prins Hendrik polder (oost). Bemalen door gemaal Prins Hendrik;130;85;0;183;5;1.2;;22.2;1;0.05
+WB5-2;Bemalingsgebied PAN polders, Polders van Nieuw Vossemeer. Bemalen door gemaal Zoute Sluis (en uitwateringssluis);1510;85;0;183;57;1.2;;94.8;1;0.05
+WB5-3;Bemalingsgebied PAN polders, Auvergnepolder. Bemalen door gemaal De Pals;1060;85;0;183;40;1.2;;47.4;1;0.05
+WB6-1;Buitendijkse gebied Volkerak: Niet bemalen, maar vrij afwaterend in- en uitlaat op Volkerak;1734;0;0;183;88;0.6;;1000000;1;0
+WB6-2;Buitendijkse gebied Rijn-Schelde-kanaal: Niet bemalen, maar vrij afwaterend in- en uitlaat op Rijn-Schelde-kanaal;471;0;0;183;17;1;;1000000;1;0.05
+WB6-3;Buitendijkse gebied Zoommeer: Niet bemalen, maar vrij afwaterend in- en uitlaat opZoommeer;181;0;0;183;11;0.6;;1000000;1;0.05

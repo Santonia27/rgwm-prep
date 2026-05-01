@@ -39,7 +39,7 @@ def process_flush(
         area = wb_params_dict[waterboard]["area_in_ha"]
         summer_flushing = wb_params_dict[waterboard]["summer_flush_6_months"]
         winter_flushing = wb_params_dict[waterboard]["winter_flush_6_months"]
-        days = wb_params_dict[waterboard]["days"]
+        days = wb_params_dict[waterboard]["flushing_days"]
 
         # Create zero series
 
