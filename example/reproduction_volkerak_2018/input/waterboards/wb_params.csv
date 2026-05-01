@@ -1,0 +1,19 @@
+waterboard;long_desc;area_in_ha;summer_flush_6_months;winter_flush_6_months;days
+WB1-1;Bemalingsgebied Flakkee oost, Oude Land van Oude Tonge. Bemalen door gemaal De Haas van Dorsser;2311;100;0;183
+WB1-2;Bemalingsgebied Flakkee oost, De Eendracht. Bemalen door gemaal De Eendracht;1579;100;0;183
+WB1-3;Bemalingsgebied Flakkee oost, Galathee. Bemalen door gemaal Galathee;1316;100;0;183
+WB1-4;Bemalingsgebied Flakkee oost, Oltgensplaat. Bemalen door gemaal Het Oude Land;749;100;0;183
+WB2-1;Bemalingsgebied Tholen, Kadijk. Bemalen door gemaal Kadijk (ca 70%) naar De Eendracht en gemaal Poortvlietsedijk (ca 30%) naar Loohoek;1755;0;0;183
+WB2-2;Bemalingsgebied Tholen, De Eendracht (+ aanvoer gemaal Kadijk). Bemalen door gemaal De Eendracht (75%) en Drie Grote Polders (25%);1579;401;0;183
+WB2-3;Bemalingsgebied Tholen, Drie Grote Polders. Bemalen door gemaal Drie Grote Polders;526;0;0;183
+WB2-4;Bemalingsgebied Tholen, Van Haaften. Bemalen door gemaal Van Haaften;547;0;0;183
+WB2-5;Bemalingsgebied Tholen, Loohoek. Bemalen door gemaal Loohoek;1764;72;0;183
+WB2-6;Bemalingsgebied Tholen, De Noord-Stavenisse. Bemalen door gemaal De Noord-Stavenisse;2883;274;0;183
+WB2-7;Bemalingsgebied Tholen, De Noord-StMaartensdijk. Bemalen door gemaal De Noord-StMaartensdijk;1700;158;0;183
+WB3-1;Bemalingsgebied St. Philipsland. Bemalen door gemaal De Luyster, lozend op Oosterschelde;1930;200;0;
+WB5-1;Bemalingsgebied PAN polders, Prins Hendrik polder (oost). Bemalen door gemaal Prins Hendrik;130;85;0;183
+WB5-2;Bemalingsgebied PAN polders, Polders van Nieuw Vossemeer. Bemalen door gemaal Zoute Sluis (en uitwateringssluis);1510;85;0;183
+WB5-3;Bemalingsgebied PAN polders, Auvergnepolder. Bemalen door gemaal De Pals;1060;85;0;183
+WB6-1;Buitendijkse gebied Volkerak: Niet bemalen, maar vrij afwaterend in- en uitlaat op Volkerak;1734;0;0;183
+WB6-2;Buitendijkse gebied Rijn-Schelde-kanaal: Niet bemalen, maar vrij afwaterend in- en uitlaat op Rijn-Schelde-kanaal;471;0;0;183
+WB6-3;Buitendijkse gebied Zoommeer: Niet bemalen, maar vrij afwaterend in- en uitlaat opZoommeer;181;0;0;183
