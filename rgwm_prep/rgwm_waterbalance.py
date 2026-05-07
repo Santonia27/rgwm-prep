@@ -15,10 +15,10 @@ if __name__ == "__main__":
     config = Config.load()
 
     # Prepare meteo model inputs
-    #process_meteo(config.timeseries.meteo)
+    process_meteo(config.timeseries.meteo)
 
     # Prepare discharge model inputs
-    #process_discharge(config.timeseries.discharge)
+    process_discharge(config.timeseries.discharge)
 
     # Prepare Pumps
     ## NOTE - wait what time series we can get whether need to calculation or not

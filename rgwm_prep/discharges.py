@@ -42,12 +42,15 @@ def process_aanvoer_discharge(fn_path: str | Path, output_fn: str | Path):
             aanvoer_per_sluis_df = discharge_timeseries_df
 
             # Save .VZM input file
-            output = output_fn / "in" / f"VZM_{name}_IN_discharge.txt"
+            output = output_fn / "in" / f"VZM_{name}_IN_discharge.VZM"
 
             with open(output, "w") as f:
                 f.write(f"{name}\n")
+                f.write(f"* {name} inlaat sluis\n")
                 f.write("* Q in miljoen m3 per dag\n")
                 f.write("* period 2010 t/m 2018\n")
+                f.write(f"* VZM_{name}_IN_discharge.VZM\n")
+                f.write("* gap-filled TS\n")
                 f.write("*DATUM WAARDE\n")
                 aanvoer_per_sluis_df.to_csv(f, sep=" ", index=False, header=False)
             #with open(output, "w") as f:
@@ -88,12 +91,15 @@ def process_afvoer_discharge(fn_path: str | Path, output_fn: str | Path):
             afvoer_per_sluis_df = discharge_timeseries_df
 
             # Save .VZM input file
-            output = output_fn / "out"/ f"VZM_{name}_OUT_discharge.txt"
+            output = output_fn / "out"/ f"VZM_{name}_OUT_discharge.VZM"
 
             with open(output, "w") as f:
                 f.write(f"{name}\n")
+                f.write(f"* {name} uitslaag sluis\n")
                 f.write("* Q in miljoen m3 per dag\n")
                 f.write("* period 2010 t/m 2018\n")
+                f.write(f"* VZM_{name}_IN_discharge.VZM\n")
+                f.write("* gap-filled TS\n")
                 f.write("*DATUM WAARDE\n")
                 afvoer_per_sluis_df.to_csv(f, sep=" ", index=False, header=False)
                 

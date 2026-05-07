@@ -1,6 +1,9 @@
 Kreekrak_spuisluis
+* Kreekrak_spuisluis uitslaag sluis
 * Q in miljoen m3 per dag
 * period 2010 t/m 2018
+* VZM_Kreekrak_spuisluis_IN_discharge.VZM
+* gap-filled TS
 *DATUM WAARDE
 20100101 0.5184
 20100102 0.3888

@@ -1,7 +1,7 @@
 import pandas as pd
 from datetime import datetime
-
-def get_wb_params(fn_path: str):
+from pathlib import Path 
+def get_wb_params(fn_path: Path | str):
     """Get waterboard parameters
     Args:
         fn_path (str): file path to the water boards parameters
@@ -50,3 +50,15 @@ def convert_m3_to_mil_m3(parameter_df: pd.DataFrame) -> pd.DataFrame:
                 parameter_df.loc[idx, "WAARDE"] = round(new_volume, 4)
     
     return parameter_df
+
+def get_waterboard(name: str, fn_path: Path | str) -> str:
+    """get the corresponding waterboard per pump or sluis
+    Args:
+       name (str): Name of the pump or sluis
+    Returns
+    -------
+        wb (str): the waterboard number in a string-format
+    """
+    wb_dict = get_wb_params(fn_path)
+    wb = wb_dict["waterboards"]
+    NotImplemented
