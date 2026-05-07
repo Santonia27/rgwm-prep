@@ -42,7 +42,7 @@ def process_aanvoer_discharge(fn_path: str | Path, output_fn: str | Path):
             aanvoer_per_sluis_df = discharge_timeseries_df
 
             # Save .VZM input file
-            output = output_fn / f"in/VZM_{name}_IN_discharge.VZM"
+            output = output_fn / "in" / f"VZM_{name}_IN_discharge.txt"
 
             with open(output, "w") as f:
                 f.write(f"{name}\n")
@@ -50,6 +50,12 @@ def process_aanvoer_discharge(fn_path: str | Path, output_fn: str | Path):
                 f.write("* period 2010 t/m 2018\n")
                 f.write("*DATUM WAARDE\n")
                 aanvoer_per_sluis_df.to_csv(f, sep=" ", index=False, header=False)
+            #with open(output, "w") as f:
+            #    f.write("# Waarnemingssoort,begindatum,begintijd,tijdstap in minuten\n")
+            #    f.write(f"# {name}\n")
+            #    f.write("H 2010-01-01 12:00 1440\n")
+            #    aanvoer_per_sluis_df["WAARDE"].to_csv(f, sep=" ", index=False, header=False)
+
 
 
 def process_afvoer_discharge(fn_path: str | Path, output_fn: str | Path):
@@ -82,7 +88,7 @@ def process_afvoer_discharge(fn_path: str | Path, output_fn: str | Path):
             afvoer_per_sluis_df = discharge_timeseries_df
 
             # Save .VZM input file
-            output = output_fn / f"out/VZM_{name}_OUT_discharge.VZM"
+            output = output_fn / "out"/ f"VZM_{name}_OUT_discharge.txt"
 
             with open(output, "w") as f:
                 f.write(f"{name}\n")
@@ -90,8 +96,48 @@ def process_afvoer_discharge(fn_path: str | Path, output_fn: str | Path):
                 f.write("* period 2010 t/m 2018\n")
                 f.write("*DATUM WAARDE\n")
                 afvoer_per_sluis_df.to_csv(f, sep=" ", index=False, header=False)
+                
+            #with open(output, "w") as f:
+            #    f.write("# Waarnemingssoort,begindatum,begintijd,tijdstap in minuten\n")
+            #    f.write(f"# {name}\n")
+            #    f.write("H 2010-01-01 12:00 1440\n")
+            #    afvoer_per_sluis_df["WAARDE"].to_csv(f, sep=" ", index=False, header=False)
 
+def process_berging(fn_path: str | Path, output_fn: str | Path):
+    """Get 
+    Args:
+        fn_path (str | Path): file path to the bergen time series
+        output_fn (str | Path): file path to where to store the output file
 
+    Returns
+    -------
+        berging_df: berging
+    """
+    for file in glob.glob(f"{fn_path}/*"):
+        if file.endswith(".csv") and "berging" in file:
+            berging_timeseries_df = pd.read_csv(file, sep=";")
+        
+
+            # Convert datetime format, convert m3 to miljoes m3
+            berging_timeseries_df  = convert_datetime(berging_timeseries_df)
+
+            berging_timeseries_df = berging_timeseries_df 
+
+            # Save .VZM input file
+            output = output_fn / "VZM_berging.VZM"
+
+            with open(output, "w") as f:
+                f.write("Berging VZM\n")
+                f.write("'* Rijkswaterstaat RDIJ, berging  VZM'\n")
+                f.write("* Berging Markermeer in milj. m3 op basis van Gew. gem. waterhoogte van 3 Markermeer locaties in cm t.o.v. NAP\n")
+                f.write("* periode 2010 t/m 2018\n")
+                f.write("* periode 2010 t/m 2018\n")
+                f.write("VZM_berging.vzm\n")
+                f.write("'* post VZM, afvoerpost % van aanvoer'\n")
+                f.write("*DATUM WAARDE\n")
+                berging_timeseries_df.to_csv(f, sep=" ", index=False, header=False)
+
+                
 def process_discharge(fn_path: str | Path):
     """Processes afvoer and aanvoer from the VZM sluises
     Args:
@@ -102,3 +148,4 @@ def process_discharge(fn_path: str | Path):
 
     process_afvoer_discharge(fn_path, output_fn)
     process_aanvoer_discharge(fn_path, output_fn)
+    process_berging(fn_path, output_fn)

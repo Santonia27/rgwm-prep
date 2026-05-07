@@ -1,6 +1,9 @@
 Verdamping
-* VZM verdamping in miljoen m3 per dag
+* VZM verdamping in mm
+* KNMI te De Bilt. gew. gem. verdmaping VZM lokaties
+* verdamping in mm
 * period 2010 t/m 2018
+* VZM_ow_evaporation.VZM
 *DATUM WAARDE
 20100101 0.0375
 20100102 0.0225

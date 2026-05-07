@@ -73,15 +73,17 @@ def process_precipitation(
         total_prec_df.loc[idx, "WAARDE"] = round(volume, 4)
 
     # Save .VZM input file
-    output = output_fn / "in/VZM_total_precipitation.VZM"
+    output = output_fn / "in" / "VZM_total_precipitation.VZM"
 
     with open(output, "w") as f:
         f.write("Neerslag\n")
-        f.write("* VZM neerslag in miljoen m3\n")
+        f.write("* VZM neerslag in mm\n")
+        f.write("* KNMI te De Bilt. gew. gem. neerslagsom VZM lokaties\n")
+        f.write("* neerslag in mm\n")
         f.write("* period 2010 t/m 2018\n")
+        f.write("* VZM_total_precipitation_mm.VZM\n")
         f.write("*DATUM WAARDE\n")
         total_prec_df.to_csv(f, sep=" ", index=False, header=False)
-
 
 ## Evaporation
 def process_evaporation(
@@ -129,12 +131,15 @@ def process_evaporation(
         ow_evap_df.loc[idx, "WAARDE"] = round(volume, 4)
 
     # Save .VZM input file
-    output = output_fn / "out/VZM_ow_evaporation.VZM"
+    output = output_fn / "out"/ "VZM_ow_evaporation.VZM"
 
     with open(output, "w") as f:
         f.write("Verdamping\n")
-        f.write("* VZM verdamping in miljoen m3 per dag\n")
+        f.write("* VZM verdamping in mm\n")
+        f.write("* KNMI te De Bilt. gew. gem. verdmaping VZM lokaties\n")
+        f.write("* verdamping in mm\n")
         f.write("* period 2010 t/m 2018\n")
+        f.write("* VZM_ow_evaporation.VZM\n")
         f.write("*DATUM WAARDE\n")
         ow_evap_df.to_csv(f, sep=" ", index=False, header=False)
 

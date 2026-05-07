@@ -1,6 +1,9 @@
 Neerslag
-* VZM neerslag in miljoen m3
+* VZM neerslag in mm
+* KNMI te De Bilt. gew. gem. neerslagsom VZM lokaties
+* neerslag in mm
 * period 2010 t/m 2018
+* VZM_total_precipitation_mm.VZM
 *DATUM WAARDE
 20100101 0.0012
 20100102 0.2074

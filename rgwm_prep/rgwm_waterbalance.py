@@ -15,10 +15,10 @@ if __name__ == "__main__":
     config = Config.load()
 
     # Prepare meteo model inputs
-    process_meteo(config.timeseries.meteo)
+    #process_meteo(config.timeseries.meteo)
 
     # Prepare discharge model inputs
-    process_discharge(config.timeseries.discharge)
+    #process_discharge(config.timeseries.discharge)
 
     # Prepare Pumps
     ## NOTE - wait what time series we can get whether need to calculation or not
@@ -30,10 +30,10 @@ if __name__ == "__main__":
     #process_flushing(config.timeseries.params)
 
     # Prepare constant fluxes
-    process_const_fluxes(
-        config.const_fluxes.leakage,
-        config.const_fluxes.lock_operations,
-        config.const_fluxes.up_grndwater_flux, config.timeseries.params
-    )
+    #process_const_fluxes(
+    #    config.const_fluxes.leakage,
+    #    config.const_fluxes.lock_operations,
+    #    config.const_fluxes.up_grndwater_flux, config.timeseries.params
+    #)
     # Prepare Berging
     print("All input files were created.")
