@@ -122,24 +122,19 @@ def process_berging(fn_path: str | Path, output_fn: str | Path):
     for file in glob.glob(f"{fn_path}/*"):
         if file.endswith(".csv") and "berging" in file:
             berging_timeseries_df = pd.read_csv(file, sep=";")
-        
-
-            # Convert datetime format, convert m3 to miljoes m3
+            # Convert datetime format
             berging_timeseries_df  = convert_datetime(berging_timeseries_df)
-
-            berging_timeseries_df = berging_timeseries_df 
 
             # Save .VZM input file
             output = output_fn / "VZM_berging.VZM"
 
             with open(output, "w") as f:
                 f.write("Berging VZM\n")
-                f.write("'* Rijkswaterstaat RDIJ, berging  VZM'\n")
-                f.write("* Berging Markermeer in milj. m3 op basis van Gew. gem. waterhoogte van 3 Markermeer locaties in cm t.o.v. NAP\n")
+                f.write('"* Rijkswaterstaat RDIJ, berging  VZM"\n')
+                f.write("* Berging Markermeer in milj. m3 op basis van Gew. gem. waterhoogte van VZM locaties in cm t.o.v. NAP\n")
                 f.write("* periode 2010 t/m 2018\n")
-                f.write("* periode 2010 t/m 2018\n")
-                f.write("VZM_berging.vzm\n")
-                f.write("'* post VZM, afvoerpost % van aanvoer'\n")
+                f.write("* VZM_berging.vzm\n")
+                f.write('"* post VZM, afvoerpost % van aanvoer"\n')
                 f.write("*DATUM WAARDE\n")
                 berging_timeseries_df.to_csv(f, sep=" ", index=False, header=False)
 
@@ -152,6 +147,6 @@ def process_discharge(fn_path: str | Path):
     config = Config.load()
     output_fn = config.output.output
 
-    process_afvoer_discharge(fn_path, output_fn)
-    process_aanvoer_discharge(fn_path, output_fn)
+    #process_afvoer_discharge(fn_path, output_fn)
+    #process_aanvoer_discharge(fn_path, output_fn)
     process_berging(fn_path, output_fn)

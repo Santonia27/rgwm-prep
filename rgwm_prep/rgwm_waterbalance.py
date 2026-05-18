@@ -18,12 +18,12 @@ if __name__ == "__main__":
     process_meteo(config.timeseries.meteo)
 
     # Prepare discharge model inputs
-    process_discharge(config.timeseries.discharge)
+    #process_discharge(config.timeseries.discharge)
 
     # Prepare Pumps
     ## NOTE - wait what time series we can get whether need to calculation or not
     ## NOTE For now take the final sum of excel to validate model
-    process_pumps(config.timeseries.pumps)
+    #process_pumps(config.timeseries.pumps)
 
     # Prepare flushing
     ## can add inlaat measurements if available

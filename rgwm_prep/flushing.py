@@ -86,6 +86,9 @@ def process_flush(
         f.write("Afvoer Inlaat doorspoeling WBs\n")
         f.write("* VZM Afvoer Inlaat doorspoeling all WBs in miljoen m3\n")
         f.write("* period 2010 t/m 2018\n")
+        f.write("* period 2010 t/m 2018\n")
+        f.write("* period 2010 t/m 2018\n")
+        f.write("* period 2010 t/m 2018\n")
         f.write("*DATUM WAARDE\n")
         wb_flushings_df[["DATUM", "sum"]].to_csv(f, sep=" ", index=False, header=False)
 

@@ -10,7 +10,7 @@ from utils import convert_datetime
 
 
 def process_precipitation(
-    fn_path: str | Path, output_fn: str | Path, total_area: int = 6000
+    fn_path: str | Path, output_fn: str | Path, total_area: int = 6000, total = False
 ):
     """Get the precipitation per station and calculate average daily precipitation for the VZM in XY. #NOTE STILL writ here
         VZM sub-areas include the following stations:
@@ -35,55 +35,79 @@ def process_precipitation(
             name = fn.stem.split("station")[-1]
             station_timeseries = pd.read_csv(file, sep=";")
             stations_dict[name] = station_timeseries
-    # Calculate average precipitation per sub-area
-    sa1 = 6217 * (
-        (
-            stations_dict["447"]["WAARDE"]
-            + stations_dict["450"]["WAARDE"]
-            + stations_dict["744"]["WAARDE"]
-            + stations_dict["837"]["WAARDE"]
-        )
-        / 4
-    )
-    sa2 = (
-        882
-        * (
-            stations_dict["744"]["WAARDE"]
-            + stations_dict["757"]["WAARDE"]
-            + stations_dict["837"]["WAARDE"]
-        )
-        / 3
-    )
-    sa3 = 1122 * (stations_dict["832"]["WAARDE"])
-    sa4 = 96 * (stations_dict["750"]["WAARDE"] + stations_dict["839"]["WAARDE"]) / 2
 
-    total_prec = round((sa1 + sa2 + sa3 + sa4) / (6217 + 882 + 1122 + 96), 3)
-    total_prec_df = pd.DataFrame(
-        {"DATUM": stations_dict["447"]["DATUM"], "WAARDE": total_prec}
-    )
-    total_prec_df = total_prec_df.dropna()
+    
+    if total is True:
+        # Calculate average precipitation per sub-area
+        sa1 = 6217 * (
+            (
+                stations_dict["447"]["WAARDE"]
+                + stations_dict["450"]["WAARDE"]
+                + stations_dict["744"]["WAARDE"]
+                + stations_dict["837"]["WAARDE"]
+            )
+            / 4
+        )
+        sa2 = (
+            882
+            * (
+                stations_dict["744"]["WAARDE"]
+                + stations_dict["757"]["WAARDE"]
+                + stations_dict["837"]["WAARDE"]
+            )
+            / 3
+        )
+        sa3 = 1122 * (stations_dict["832"]["WAARDE"])
+        sa4 = 96 * (stations_dict["750"]["WAARDE"] + stations_dict["839"]["WAARDE"]) / 2
 
-    # Convert datetime format
-    total_prec_df = convert_datetime(total_prec_df)
+        total_prec = round((sa1 + sa2 + sa3 + sa4) / (6217 + 882 + 1122 + 96), 3)
+        total_prec_df = pd.DataFrame(
+            {"DATUM": stations_dict["447"]["DATUM"], "WAARDE": total_prec}
+        )
+        total_prec_df = total_prec_df.dropna()
+
+        # Convert datetime format
+        total_prec_df = convert_datetime(total_prec_df)
+                
+        # Adjust format to model input
+        for idx, row in total_prec_df.iterrows():
+            # Convert mm/d to miljoen m3
+            volume = total_area * row["WAARDE"] * 0.00001
+            total_prec_df.loc[idx, "WAARDE"] = round(volume, 4)
+
+
+        # Save .VZM input file
+        output = output_fn / "in" / "VZM_total_precipitation.VZM"
+
+        with open(output, "w") as f:
+            f.write("Neerslag\n")
+            f.write("* VZM neerslag in miljoen m3\n")
+            f.write("* KNMI te De Bilt. gew. gem. neerslagsom VZM lokaties\n")
+            f.write("* neerslag in miljoen m3\n")
+            f.write("* period 2010 t/m 2018\n")
+            f.write("* VZM_total_precipitation.VZM\n")
+            f.write("*DATUM WAARDE\n")
+            total_prec_df.to_csv(f, sep="\t", index=False, header=False)
+    else:
+        # Convert datetime format
+        for station_df_entry in stations_dict:
+            station_df = convert_datetime(stations_dict[station_df_entry])
+                
+                    # Save .VZM input file
+            output = output_fn / "in" / f"VZM_{station_df_entry}_precipitation.VZM"
+
+            with open(output, "w") as f:
+                f.write("Neerslag\n")
+                f.write("* VZM neerslag in mm\n")
+                f.write("* KNMI te De Bilt. gew. gem. neerslagsom VZM lokaties\n")
+                f.write(f"* neerslag {station_df_entry} in mm\n")
+                f.write("* period 2010 t/m 2018\n")
+                f.write(f"* {output.stem}.VZM\n")
+                f.write("*DATUM WAARDE\n")
+                station_df.to_csv(f, sep="\t", index=False, header=False)
             
-    # Adjust format to model input
-    for idx, row in total_prec_df.iterrows():
-        # Convert mm/d to miljoen m3
-        volume = total_area * row["WAARDE"] * 0.00001
-        total_prec_df.loc[idx, "WAARDE"] = round(volume, 4)
 
-    # Save .VZM input file
-    output = output_fn / "in" / "VZM_total_precipitation.VZM"
-
-    with open(output, "w") as f:
-        f.write("Neerslag\n")
-        f.write("* VZM neerslag in mm\n")
-        f.write("* KNMI te De Bilt. gew. gem. neerslagsom VZM lokaties\n")
-        f.write("* neerslag in mm\n")
-        f.write("* period 2010 t/m 2018\n")
-        f.write("* VZM_total_precipitation_mm.VZM\n")
-        f.write("*DATUM WAARDE\n")
-        total_prec_df.to_csv(f, sep=" ", index=False, header=False)
+        
 
 ## Evaporation
 def process_evaporation(
@@ -135,13 +159,13 @@ def process_evaporation(
 
     with open(output, "w") as f:
         f.write("Verdamping\n")
-        f.write("* VZM verdamping in mm\n")
+        f.write("* VZM verdamping in miljoen m3\n")
         f.write("* KNMI te De Bilt. gew. gem. verdmaping VZM lokaties\n")
-        f.write("* verdamping in mm\n")
+        f.write("* verdamping in miljoen m3\n")
         f.write("* period 2010 t/m 2018\n")
         f.write("* VZM_ow_evaporation.VZM\n")
         f.write("*DATUM WAARDE\n")
-        ow_evap_df.to_csv(f, sep=" ", index=False, header=False)
+        ow_evap_df.to_csv(f, sep="\t", index=False, header=False)
 
 
 def process_meteo(fn_path: str, total_area: int = 6000, ow_factor: float = 1.25):
