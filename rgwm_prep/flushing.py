@@ -54,7 +54,7 @@ def process_flush(
             elif date_object.strftime("%B") in winter_months:
                 flushing = (
                     winter_flushing / 1000000
-                )  # Calculation from Excel water boards 
+                )  # Calculation from Excel water boards
             else:
                 raise ValueError(
                     f"Month '{date_object.strftime("%B")}' (row {idx}, date {row['DATUM']}) "

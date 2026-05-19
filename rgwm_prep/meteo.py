@@ -10,7 +10,7 @@ from utils import convert_datetime
 
 
 def process_precipitation(
-    fn_path: str | Path, output_fn: str | Path, total_area: int = 6000, total = False
+    fn_path: str | Path, output_fn: str | Path, total_area: int = 6000, balance=False
 ):
     """Get the precipitation per station and calculate average daily precipitation for the VZM in XY. #NOTE STILL writ here
         VZM sub-areas include the following stations:
@@ -22,6 +22,7 @@ def process_precipitation(
         fn_path (str | Path): file path to the precipitation time series files per station in mm per day
         output_fn (str | Path): file path to where to store the output file
         total_area (int): total area of VZM in ha. Default set to 6000 ha
+        balance (boolean): If True write output in Balance format. If false write output in gap-fill/model format,. Default is set to False.
 
     Returns
     -------
@@ -36,8 +37,7 @@ def process_precipitation(
             station_timeseries = pd.read_csv(file, sep=";")
             stations_dict[name] = station_timeseries
 
-    
-    if total is True:
+    if balance is True:
         # Calculate average precipitation per sub-area
         sa1 = 6217 * (
             (
@@ -68,21 +68,20 @@ def process_precipitation(
 
         # Convert datetime format
         total_prec_df = convert_datetime(total_prec_df)
-                
+
         # Adjust format to model input
         for idx, row in total_prec_df.iterrows():
             # Convert mm/d to miljoen m3
             volume = total_area * row["WAARDE"] * 0.00001
             total_prec_df.loc[idx, "WAARDE"] = round(volume, 4)
 
-
         # Save .VZM input file
-        output = output_fn / "in" / "VZM_total_precipitation.VZM"
+        output = output_fn / "in" / "VZM_total_precipitation_milm3.VZM"
 
         with open(output, "w") as f:
             f.write("Neerslag\n")
             f.write("* VZM neerslag in miljoen m3\n")
-            f.write("* KNMI te De Bilt. gew. gem. neerslagsom VZM lokaties\n")
+            f.write("* KNMI te De Built. gew. gem. neerslagsom VZM lokaties\n")
             f.write("* neerslag in miljoen m3\n")
             f.write("* period 2010 t/m 2018\n")
             f.write("* VZM_total_precipitation.VZM\n")
@@ -91,30 +90,21 @@ def process_precipitation(
     else:
         # Convert datetime format
         for station_df_entry in stations_dict:
-            station_df = convert_datetime(stations_dict[station_df_entry])
-                
-                    # Save .VZM input file
-            output = output_fn / "in" / f"VZM_{station_df_entry}_precipitation.VZM"
+            station_df = stations_dict[station_df_entry]
 
-            with open(output, "w") as f:
-                f.write("Neerslag\n")
-                f.write("* VZM neerslag in mm\n")
-                f.write("* KNMI te De Bilt. gew. gem. neerslagsom VZM lokaties\n")
-                f.write(f"* neerslag {station_df_entry} in mm\n")
-                f.write("* period 2010 t/m 2018\n")
-                f.write(f"* {output.stem}.VZM\n")
-                f.write("*DATUM WAARDE\n")
-                station_df.to_csv(f, sep="\t", index=False, header=False)
-            
+            # Save .VZM input file
+            output = output_fn / "in" / f"VZM_{station_df_entry}_precipitation_mm.csv"
 
-        
+            with open(output, "w", newline="") as f:
+                f.write("# Waarnemingssoort,begindatum,begintijd,tijdstap in minuten\n")
+                f.write(f"# neerslag_{output.stem} (mm)\n")
+                f.write("H 2010-01-01 12:00 1440\n")
+                station_df["WAARDE"].to_csv(f, sep=",", index=False, header=False)
+
 
 ## Evaporation
 def process_evaporation(
-    fn_path: str | Path,
-    output_fn: str | Path,
-    total_area: int = 6000,
-    ow_factor: float = 1.25,
+    fn_path: str | Path, output_fn: str | Path, total_area: int = 6000, balance=False
 ):
     """Get the evaporation per station and calculate the open water evaporation using factor 1.25
         VZM include the following stations:
@@ -123,11 +113,11 @@ def process_evaporation(
         fn_path (str | Path): file path to the evaporation time series files per station in mm per day
         output_fn (str | Path): file path to where to store the output file
         total_area (int): total area of VZM in ha. Default set to 6000 ha
-        ow_factor (float): Conversion factor from station evaporation to open water evaporation. Default set to 1.25
+        balance (boolean): If True write output in Balance format. If false write output in gap-fill/model format,. Default is set to False.
 
     Returns
     -------
-        ow_evap: open water evaporation for total VZM in miljoen m3
+        ow_evap: evaporation for total VZM in miljoen m3 or mm
     """
 
     stations_dict = {}
@@ -140,42 +130,53 @@ def process_evaporation(
             stations_dict[name] = station_timeseries
 
     # Calculate open water evaporation
-    ow_evap = ow_factor * (stations_dict["310"]["WAARDE"])
     ow_evap_df = pd.DataFrame(
-        {"DATUM": stations_dict["310"]["DATUM"], "WAARDE": ow_evap}
+        {
+            "DATUM": stations_dict["310"]["DATUM"],
+            "WAARDE": stations_dict["310"]["WAARDE"],
+        }
     )
     ow_evap_df = ow_evap_df.dropna()
-    
-    # Convert datetime format
-    ow_evap_df = convert_datetime(ow_evap_df)
-    
-    for idx, row in ow_evap_df.iterrows():
-        # Convert mm/d to miljoen m3
-        volume = total_area * row["WAARDE"] * 0.00001
-        ow_evap_df.loc[idx, "WAARDE"] = round(volume, 4)
 
-    # Save .VZM input file
-    output = output_fn / "out"/ "VZM_ow_evaporation.VZM"
+    if balance:
+        # Convert datetime format
+        ow_evap_df = convert_datetime(ow_evap_df)
 
-    with open(output, "w") as f:
-        f.write("Verdamping\n")
-        f.write("* VZM verdamping in miljoen m3\n")
-        f.write("* KNMI te De Bilt. gew. gem. verdmaping VZM lokaties\n")
-        f.write("* verdamping in miljoen m3\n")
-        f.write("* period 2010 t/m 2018\n")
-        f.write("* VZM_ow_evaporation.VZM\n")
-        f.write("*DATUM WAARDE\n")
-        ow_evap_df.to_csv(f, sep="\t", index=False, header=False)
+        for idx, row in ow_evap_df.iterrows():
+            # Convert mm/d to miljoen m3
+            volume = total_area * row["WAARDE"] * 0.00001
+            ow_evap_df.loc[idx, "WAARDE"] = round(volume, 4)
+
+        # Save .VZM input file
+        output = output_fn / "out" / "VZM_ow_evaporation_milm3.VZM"
+
+        with open(output, "w") as f:
+            f.write("Verdamping\n")
+            f.write("* VZM verdamping in miljoen m3\n")
+            f.write("* KNMI te De Built. gew. gem. verdmaping VZM lokaties\n")
+            f.write("* verdamping in miljoen m3\n")
+            f.write("* period 2010 t/m 2018\n")
+            f.write("* VZM_ow_evaporation.VZM\n")
+            f.write("*DATUM WAARDE\n")
+            ow_evap_df.to_csv(f, sep="\t", index=False, header=False)
+    else:
+        # Save .VZM input file
+        output = output_fn / "out" / "VZM_ow_evaporation_mm.csv"
+        with open(output, "w", newline="") as f:
+            f.write("# Waarnemingssoort,begindatum,begintijd,tijdstap in minuten\n")
+            f.write("# E_Makkink (mm)\n")
+            f.write("H 2010-01-01 12:00 1440\n")
+            ow_evap_df["WAARDE"].to_csv(f, sep=",", index=False, header=False)
 
 
-def process_meteo(fn_path: str, total_area: int = 6000, ow_factor: float = 1.25):
+def process_meteo(fn_path: str, total_area: int = 6000, balance=False):
     """Processes precipitation and evaporation from the VZM stations.
     Args:
         fn_path (str | Path): file path to the meteo time series files per station in mm per day
         total_area (int): total area of VZM in ha. Default set to 6000 ha
-        ow_factor (float): Conversion factor from station evaporation to open water evaporation. Default set to 1.25
+        balance (boolean): If True write output in Balance format. If false write output in gap-fill/model format,. Default is set to False.
     """
     config = Config.load()
     output_fn = config.output.output
-    process_precipitation(fn_path, output_fn, total_area)
-    process_evaporation(fn_path, output_fn, total_area, ow_factor)
+    process_precipitation(fn_path, output_fn, total_area, balance)
+    process_evaporation(fn_path, output_fn, total_area, balance)
