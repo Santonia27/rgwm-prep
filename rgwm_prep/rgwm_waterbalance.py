@@ -4,6 +4,7 @@
 # --------------------------------------------------------------------------------
 from config import Config
 from meteo import process_meteo
+from pumps import process_pumps
 
 
 # Run script
@@ -11,15 +12,13 @@ if __name__ == "__main__":
     config = Config.load()
 
     # Prepare meteo model inputs
-    process_meteo(config.timeseries.meteo, balance = True)
+    #process_meteo(config.timeseries.meteo, balance = True)
 
     # Prepare discharge model inputs
     # process_discharge(config.timeseries.discharge)
 
     # Prepare Pumps
-    ## NOTE - wait what time series we can get whether need to calculation or not
-    ## NOTE For now take the final sum of excel to validate model
-    # process_pumps(config.timeseries.pumps)
+    process_pumps(config.timeseries.pumps, balance = False)
 
     # Prepare flushing
     ## can add inlaat measurements if available

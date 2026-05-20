@@ -60,6 +60,9 @@ def process_aanvoer_pump(fn_path: str | Path, output_fn: str | Path, balance: bo
                     f.write("*DATUM WAARDE\n")
                     aanvoer_per_pump_df.to_csv(f, sep=" ", index=False, header=False)
             else:
+                # Save .VZM input file
+                output = output_fn / "in" / f"VZM_Gemaal_{name}_m3.csv"
+                
                 with open(output, "w", newline="") as f:
                     f.write("# Waarnemingssoort,begindatum,begintijd,tijdstap in minuten\n")
                     f.write(f"# {name} (m3)\n")
