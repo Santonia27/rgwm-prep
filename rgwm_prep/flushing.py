@@ -4,6 +4,7 @@ import pandas as pd
 from pathlib import Path
 from utils import get_wb_params
 
+#NOTE! Write Flushing for the relation file ! not time series!
 
 def process_flush(
     fn_path: str | Path,

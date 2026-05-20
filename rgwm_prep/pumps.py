@@ -12,7 +12,7 @@ def format_value(x):
     return str(x)
 
 
-def process_aanvoer_pump(fn_path: str | Path, output_fn: str | Path):
+def process_aanvoer_pump(fn_path: str | Path, output_fn: str | Path, balance: bool = False):
     """Get the pump volume in Q in miljoen m3/dag per pump
         VZM include the following pump stations:
             - Bathse spuisluis gecorrigeerd
@@ -21,6 +21,7 @@ def process_aanvoer_pump(fn_path: str | Path, output_fn: str | Path):
     Args:
         fn_path (str): file path to the pump time series in XYZ per day
         output_fn (str | Path): file path to where to store the output file
+        balance (boolean): If True write output in Balance format. If false write output in gap-fill/model format,. Default is set to False.
 
     Returns
     -------
@@ -33,46 +34,48 @@ def process_aanvoer_pump(fn_path: str | Path, output_fn: str | Path):
             pump_timeseries_df = pd.read_csv(file, sep=";")
             # pump_timeseries_df["WAARDE"] = pump_timeseries_df["WAARDE"].astype(float)
 
-            # Convert datetime format, convert m3 to miljoes m3
-            pump_timeseries_df = convert_datetime(pump_timeseries_df)
-            pump_timeseries_df = convert_m3_to_mil_m3(pump_timeseries_df)
-
             for idx, row in pump_timeseries_df.iterrows():
                 # Convert gaps to 0 values
-                if row["WAARDE"] is np.nan or row["WAARDE"] == "":
-                    pump_timeseries_df.loc[idx, "WAARDE"] = 0
+                if row["WAARDE"] is np.nan or row["WAARDE"] == 0:
+                    pump_timeseries_df.loc[idx, "WAARDE"] = ""
 
             # wb = get_waterboard(name, fn_path) # Still need to implement this. The path sholud be th epath to the waterboard
 
             aanvoer_per_pump_df = pump_timeseries_df
-            # Save .VZM input file
-            output = output_fn / "in" / f"VZM_Gemaal_{name}.csv"
+            
+            if balance:
+                # Convert datetime format, convert m3 to miljoes m3
+                aanvoer_per_pump_df = convert_datetime(aanvoer_per_pump_df)
+                aanvoer_per_pump_df = convert_m3_to_mil_m3(aanvoer_per_pump_df) #NOTE This may not be needed as outputs may already be in mil3
+                # Save .VZM input file
+                output = output_fn / "in" / f"VZM_Gemaal_{name}_mil3.VZM"
 
-            # with open(output, "w") as f:
-            #    f.write(f"Gemaal_{name}\n")
-            #    f.write(f"* {name} Gemaal TS\n")
-            #    f.write("* Q in miljoen m3 per dag\n")
-            #    f.write("* period 2010 t/m 2018\n")
-            #    f.write(f"* VZM_Gemaal_{name}.VZM\n")
-            #    #f.write(f"* waterboard_{wb} \n") #Still needs to be implement
-            #    f.write("* waterboard 1 \n") #NOTE This is only hard coded for the current test.
-            #    f.write("*DATUM WAARDE\n")
-            #    aanvoer_per_pump_df.to_csv(f, sep=" ", index=False, header=False)
-            with open(output, "w", newline="") as f:
-                f.write("# Waarnemingssoort,begindatum,begintijd,tijdstap in minuten\n")
-                f.write(f"# {name}\n")
-                f.write("H 2010-01-01 12:00 1440\n")
-                aanvoer_per_pump_df["WAARDE"].to_csv(
-                    f, sep=" ", index=False, header=False, float_format="%.10g"
-                )
+                with open(output, "w") as f:
+                    f.write(f"Gemaal_{name}\n")
+                    f.write(f"* {name} Gemaal TS\n")
+                    f.write("* Q in miljoen m3 per dag\n")
+                    f.write("* period 2010 t/m 2018\n")
+                    f.write(f"* VZM_Gemaal_{name}.VZM\n")
+                    f.write("* waterboard_ \n") #Still needs to be implement
+                    f.write("*DATUM WAARDE\n")
+                    aanvoer_per_pump_df.to_csv(f, sep=" ", index=False, header=False)
+            else:
+                with open(output, "w", newline="") as f:
+                    f.write("# Waarnemingssoort,begindatum,begintijd,tijdstap in minuten\n")
+                    f.write(f"# {name} (m3)\n")
+                    f.write("Q 2010-01-01 12:00 1440\n")
+                    aanvoer_per_pump_df["WAARDE"].to_csv(
+                        f, sep=" ", index=False, header=False, float_format="%.10g"
+                    )
 
 
-def process_pumps(fn_path: str | Path):
+def process_pumps(fn_path: str | Path, balance: bool = False):
     """Processes afvoer and aanvoer from the VZM pumps
     Args:
         fn_path (str: Path): file path to the pump time series in Q in miljoen m3 per day
+        balance (boolean): If True write output in Balance format. If false write output in gap-fill/model format,. Default is set to False.
     """
     config = Config.load()
     output_fn = config.output.output
 
-    process_aanvoer_pump(fn_path, output_fn)
+    process_aanvoer_pump(fn_path, output_fn, balance)
