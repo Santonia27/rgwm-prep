@@ -3,7 +3,6 @@
 # Function: Converts the csv input files to .mmr input files for the RGWM model
 # --------------------------------------------------------------------------------
 from config import Config
-from meteo import process_meteo
 from pumps import process_pumps
 
 
@@ -12,13 +11,13 @@ if __name__ == "__main__":
     config = Config.load()
 
     # Prepare meteo model inputs
-    #process_meteo(config.timeseries.meteo, balance = True)
+    # process_meteo(config.timeseries.meteo, balance = True)
 
     # Prepare discharge model inputs
     # process_discharge(config.timeseries.discharge)
 
     # Prepare Pumps
-    process_pumps(config.timeseries.pumps, balance = False)
+    process_pumps(config.timeseries.pumps)
 
     # Prepare flushing
     ## can add inlaat measurements if available
