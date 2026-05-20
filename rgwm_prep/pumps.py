@@ -32,12 +32,12 @@ def process_aanvoer_pump(fn_path: str | Path, output_fn: str | Path, balance: bo
             fn = Path(file)
             name = fn.stem.split("pump_")[-1]
             pump_timeseries_df = pd.read_csv(file, sep=";")
-            # pump_timeseries_df["WAARDE"] = pump_timeseries_df["WAARDE"].astype(float)
 
             for idx, row in pump_timeseries_df.iterrows():
                 # Convert gaps to 0 values
-                if row["WAARDE"] is np.nan or row["WAARDE"] == 0:
-                    pump_timeseries_df.loc[idx, "WAARDE"] = ""
+                if row["WAARDE"] == 0 and idx > 0 and idx < (len(pump_timeseries_df)-1):
+                    pump_timeseries_df.loc[idx, "WAARDE"] = np.nan
+
 
             # wb = get_waterboard(name, fn_path) # Still need to implement this. The path sholud be th epath to the waterboard
 
