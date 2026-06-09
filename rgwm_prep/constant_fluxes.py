@@ -39,7 +39,7 @@ def process_leakage(
     for idx, row in leackage_df:
         leackage_df.loc[idx, ["WAAARDE"]] = sum
         # Save .VZM input file
-    output = output_fn / "in/VZM_leackage.VZM"
+    output = output_fn / "in" /"VZM_leackage.VZM"
 
     with open(output, "w") as f:
         f.write("Leakage\n")
@@ -84,7 +84,7 @@ def process_lock_operations(
     for idx, row in lock_operations_df:
         lock_operations_df.loc[idx, ["WAAARDE"]] = sum
         # Save .VZM input file
-    output = output_fn / "in/VZM_lock_operations.VZM"
+    output = output_fn / "in" /"VZM_lock_operations.VZM"
 
     with open(output, "w") as f:
         f.write("Lock operations\n")
@@ -130,7 +130,7 @@ def process_up_grndwater_flux(
     for idx, row in up_grndwater_flux:
         up_grndwater_flux.loc[idx, ["WAAARDE"]] = sum
         # Save .VZM input file
-    output = output_fn / "in/VZM_lock_operations.VZM"
+    output = output_fn / "in" / "VZM_lock_operations.VZM"
 
     with open(output, "w") as f:
         f.write("Up groundwater fluxes\n")

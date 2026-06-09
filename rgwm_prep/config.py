@@ -21,15 +21,20 @@ class SeasonConfig(BaseModel):
 class TimeSeriesConfig(BaseModel):
     meteo: Path
     discharge: Path
-    pumps: Path
+    pumps_wb: Path
+    pumps_balance: Path
+    pumps_wb_out: Path
     params: Path
 
-
+class BalanceConfig(BaseModel):
+    balance: bool
+    
 class Config(BaseModel):
     timeseries: TimeSeriesConfig
     season: SeasonConfig
     output: OutputConfig
     const_fluxes: ConstFluxesConfig
+    balance: BalanceConfig
 
     @classmethod
     def load(cls, path: Path = Path("config.toml")) -> "Config":

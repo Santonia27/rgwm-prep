@@ -149,6 +149,6 @@ def process_discharge(fn_path: str | Path):
     config = Config.load()
     output_fn = config.output.output
 
-    # process_afvoer_discharge(fn_path, output_fn)
-    # process_aanvoer_discharge(fn_path, output_fn)
+    process_afvoer_discharge(fn_path, output_fn)
+    process_aanvoer_discharge(fn_path, output_fn)
     process_berging(fn_path, output_fn)

@@ -1,7 +1,9 @@
 [timeseries]
 meteo = "examples/reproduction_volkerak_2018//input/meteo"
 discharge = "examples/reproduction_volkerak_2018/input/discharge"
-pumps = "examples/reproduction_volkerak_2018//input/pumps"
+pumps_wb = "examples/reproduction_volkerak_2018//input/pumps"
+pumps_balance = "P:/11212800-002/2. Calculations/rgwm_versie2.5.0/examples/VZM/output"
+pumps_wb_out = "examples/reproduction_volkerak_2018/input/params/VZM_pumps.csv"
 params =  "examples/reproduction_volkerak_2018/input/params"
 
 [season]
@@ -16,3 +18,6 @@ output = "examples/reproduction_volkerak_2018/output"
 leakage = "examples/reproduction_volkerak_2018/input/const_fluxes/leakage.csv"
 lock_operations = "examples/reproduction_volkerak_2018/input/const_fluxes/lock_operations.csv"
 up_grndwater_flux = "examples/reproduction_volkerak_2018/input/const_fluxes/up_grndwater_flux.csv"
+
+[balance]
+balance = "True"

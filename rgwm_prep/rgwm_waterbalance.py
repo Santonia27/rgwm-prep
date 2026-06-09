@@ -4,27 +4,33 @@
 # --------------------------------------------------------------------------------
 from config import Config
 from pumps import process_pumps
+from discharges import process_discharge
+from constant_fluxes import process_const_fluxes
 
 
 # Run script
 if __name__ == "__main__":
     config = Config.load()
-
+    balance = config.balance.balance
+    
     # Prepare meteo model inputs
     # process_meteo(config.timeseries.meteo, balance = True)
 
     # Prepare discharge model inputs
-    # process_discharge(config.timeseries.discharge)
+    #process_discharge(config.timeseries.discharge)
 
     # Prepare Pumps
-    process_pumps(config.timeseries.pumps)
+    if balance: 
+        process_pumps(config.timeseries.pumps_balance, balance)
+    else:
+        process_pumps(config.timeseries.pumps_wb, balance) 
 
-    # Prepare flushing
+    # Prepare flushing relationsfile #NOTE here I could create a text snippet for the relationship yaml and eventually write the whole yaml
     ## can add inlaat measurements if available
     # process_flushing(config.timeseries.params)
 
     # Prepare constant fluxes
-    # process_const_fluxes(
+    #process_const_fluxes(
     #    config.const_fluxes.leakage,
     #    config.const_fluxes.lock_operations,
     #    config.const_fluxes.up_grndwater_flux, config.timeseries.params
