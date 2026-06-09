@@ -23,6 +23,7 @@ class TimeSeriesConfig(BaseModel):
     discharge: Path
     pumps_wb: Path
     pumps_balance: Path
+    inlaat_balance: Path
     pumps_wb_out: Path
     inlaat_wb_out: Path
     params: Path

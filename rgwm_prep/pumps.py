@@ -82,7 +82,9 @@ def process_aanvoer_pump(fn_path: str | Path, output_fn: str | Path, balance: bo
                 aanvoer_per_pump_df = pump_timeseries_df
 
                 # Save .VZM input file
-                output = output_fn / "in" / f"VZM_Gemaal_{name}_m3.csv"
+                folder = output_fn / "in" / "pump_wb_input"
+                os.makedirs(folder, exist_ok=True)
+                output = folder  / f"VZM_Gemaal_{name}_m3.csv"
 
                 with open(output, "w", newline="") as f:
                     f.write("# Waarnemingssoort,begindatum,begintijd,tijdstap in minuten\n")
