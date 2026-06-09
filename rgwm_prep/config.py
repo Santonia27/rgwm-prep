@@ -24,6 +24,7 @@ class TimeSeriesConfig(BaseModel):
     pumps_wb: Path
     pumps_balance: Path
     pumps_wb_out: Path
+    inlaat_wb_out: Path
     params: Path
 
 class BalanceConfig(BaseModel):

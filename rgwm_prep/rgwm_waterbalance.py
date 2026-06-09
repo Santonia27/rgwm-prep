@@ -6,6 +6,7 @@ from config import Config
 from pumps import process_pumps
 from discharges import process_discharge
 from constant_fluxes import process_const_fluxes
+from inlaat import process_inlaat
 
 
 # Run script
@@ -19,11 +20,14 @@ if __name__ == "__main__":
     # Prepare discharge model inputs
     #process_discharge(config.timeseries.discharge)
 
-    # Prepare Pumps
+    # Prepare Pumps and Inlaat
     if balance: 
         process_pumps(config.timeseries.pumps_balance, balance)
+        process_inlaat(config.timeseries.inlaat_balance, balance)
     else:
         process_pumps(config.timeseries.pumps_wb, balance) 
+        process_inlaat(config.timeseries.inlaat_wb, balance) 
+        
 
     # Prepare flushing relationsfile #NOTE here I could create a text snippet for the relationship yaml and eventually write the whole yaml
     ## can add inlaat measurements if available
