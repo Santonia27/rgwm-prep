@@ -42,7 +42,7 @@ def process_aanvoer_pump(fn_path: str | Path, output_fn: str | Path, balance: bo
             output = output_fn / "in" / f"Gemaal{name}_{wb}.VZM"
 
             with open(output, "w") as f:
-                f.write(f"{name}\n")
+                f.write(f"{name}_{wb}\n")
                 f.write(f"* {name} Gemaal\n")
                 f.write("* Q in miljoen m3 per dag\n")
                 f.write("* period 2010 t/m 2018\n")
