@@ -31,18 +31,29 @@ def process_aanvoer_pump(fn_path: str | Path, output_fn: str | Path, balance: bo
         for idx, row in pumps_df.iterrows():
             name = row["Gemaal"]
             wb = row["WB"]
+            balance = True
             for dir in glob.glob(f"{fn_path}/*"):
                 for file in os.listdir(dir):
                     filename = os.fsdecode(file)
-                    if (name + "_bemaling") in filename:
-                        pump_timeseries_df = pd.read_csv(os.path.join(dir,file), sep=",")
+                    if (name + "_bemaling") in filename:                          
+                        with open(os.path.join(dir, file), 'r') as f:
+                            first_line = f.readline()
+                            if ";" in first_line:
+                                sep = ";"
+                            else:
+                                sep = ","
+                                
+                        pump_timeseries_df = pd.read_csv(os.path.join(dir,file), sep=sep)
             
             gemaal_df = pd.DataFrame(data = {"DATUM": pump_timeseries_df["time"], "WAARDE": pump_timeseries_df[" volume"]})
-            gemaal_df = convert_datetime(gemaal_df, balance)
-            output = output_fn / "in" / f"Gemaal{name}_{wb}.VZM"
+            gemaal_df = convert_datetime(gemaal_df, balance, sep)
+            folder = output_fn / "in" / "pump_balance_input"
+            os.makedirs(folder, exist_ok=True)
+                
+            output = folder / f"Gemaal_{name}_wb{wb}.VZM"
 
             with open(output, "w") as f:
-                f.write(f"{name}_{wb}\n")
+                f.write(f"{name} Gemaal WB{wb}\n")
                 f.write(f"* {name} Gemaal\n")
                 f.write("* Q in miljoen m3 per dag\n")
                 f.write("* period 2010 t/m 2018\n")

@@ -22,7 +22,7 @@ def get_wb_params(fn_path: Path | str):
     return wb_params_dict
 
 
-def convert_datetime(parameter_df: pd.DataFrame, balance) -> pd.DataFrame:
+def convert_datetime(parameter_df: pd.DataFrame, balance: bool, sep: str = None) -> pd.DataFrame:
     """Convert the excel datetime format to the required format for the RGWM tool
     Args:
         parameter_df (pd.DataFrame): Dataframe of the parameter including the "DATUM" (date) and "WAARDE" (param value) column
@@ -32,8 +32,10 @@ def convert_datetime(parameter_df: pd.DataFrame, balance) -> pd.DataFrame:
     """
     for idx, row in parameter_df.iterrows():
         # Adjust datetime format
-        if balance:
+        if balance and "," in sep:
             date_object = datetime.strptime(row["DATUM"], "%Y/%m/%d %H:%M:%S").date()
+        elif balance and ";" in sep:
+            date_object = datetime.strptime(row["DATUM"], "%d-%m-%Y %H:%M").date()
         else:
             date_object = datetime.strptime(row["DATUM"], "%d-%m-%Y").date()
             
