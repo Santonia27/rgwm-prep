@@ -7,6 +7,7 @@ from pumps import process_pumps
 from discharges import process_discharge
 from constant_fluxes import process_const_fluxes
 from inlaat import process_inlaat
+from chloride import process_chloride
 
 
 # Run script
@@ -21,11 +22,11 @@ if __name__ == "__main__":
     #process_discharge(config.timeseries.discharge)
 
     # Prepare Pumps and Inlaat
-    if balance: 
+    #if balance: 
         #process_pumps(config.timeseries.pumps_balance, balance)
-        process_inlaat(config.timeseries.inlaat_balance)
-    else:
-        process_pumps(config.timeseries.pumps_wb, balance)  
+    #    process_inlaat(config.timeseries.inlaat_balance)
+    #else:
+    #    process_pumps(config.timeseries.pumps_wb, balance)  
         
 
     # Prepare flushing relationsfile #NOTE here I could create a text snippet for the relationship yaml and eventually write the whole yaml
@@ -36,7 +37,10 @@ if __name__ == "__main__":
     #process_const_fluxes(
     #    config.const_fluxes.leakage,
     #    config.const_fluxes.lock_operations,
-    #    config.const_fluxes.up_grndwater_flux, config.timeseries.params
+    #    config.const_fluxes.up_grndwater_flux, config.timeseries.params,
+    #    balance
     # )
+    
+    process_chloride(config.timeseries.chloride)
     # Prepare Berging
     print("All input files were created.")

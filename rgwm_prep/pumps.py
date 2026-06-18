@@ -60,8 +60,7 @@ def process_aanvoer_pump(fn_path: str | Path, output_fn: str | Path, balance: bo
                 f.write(f"* {output}\n")
                 f.write("* gap-filled TS\n")
                 f.write("*DATUM WAARDE\n")
-                gemaal_df.to_csv(f, sep=" ", index=False, header=False)
-                
+                gemaal_df.to_csv(f, sep=" ", index=False, header=False)       
             
     else:
         for file in glob.glob(f"{fn_path}/*"):
@@ -80,7 +79,7 @@ def process_aanvoer_pump(fn_path: str | Path, output_fn: str | Path, balance: bo
                         pump_timeseries_df.loc[idx, "WAARDE"] = np.nan
 
                 aanvoer_per_pump_df = pump_timeseries_df
-
+                
                 # Save .VZM input file
                 folder = output_fn / "in" / "pump_wb_input"
                 os.makedirs(folder, exist_ok=True)

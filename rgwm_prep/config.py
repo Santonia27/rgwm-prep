@@ -21,6 +21,7 @@ class SeasonConfig(BaseModel):
 class TimeSeriesConfig(BaseModel):
     meteo: Path
     discharge: Path
+    chloride: Path
     pumps_wb: Path
     pumps_balance: Path
     inlaat_balance: Path

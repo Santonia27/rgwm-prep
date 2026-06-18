@@ -1,6 +1,7 @@
 [timeseries]
 meteo = "examples/reproduction_volkerak_2018//input/meteo"
 discharge = "examples/reproduction_volkerak_2018/input/discharge"
+chloride= "examples/reproduction_volkerak_2018/input/chloride"
 pumps_wb = "examples/reproduction_volkerak_2018//input/pumps"
 inlaat_wb = "examples/reproduction_volkerak_2018//input/inlaat"
 pumps_balance = "P:/11212800-002/2. Calculations/rgwm_versie2.5.0/examples/VZM/output"
