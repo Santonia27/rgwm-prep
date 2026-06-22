@@ -19,7 +19,7 @@ if __name__ == "__main__":
     # process_meteo(config.timeseries.meteo, balance = True)
 
     # Prepare discharge model inputs
-    #process_discharge(config.timeseries.discharge)
+    #process_discharge(config.timeseries.discharge, balance)
 
     # Prepare Pumps and Inlaat
     #if balance: 
@@ -41,6 +41,7 @@ if __name__ == "__main__":
     #    balance
     # )
     
+    # Prepare chloride 
     process_chloride(config.timeseries.chloride)
     # Prepare Berging
     print("All input files were created.")

@@ -2,9 +2,52 @@ from config import Config
 import glob
 from pathlib import Path
 import pandas as pd
-from utils import convert_datetime, convert_m3_to_mil_m3
+from utils import convert_datetime
 import os
 ## Afvoer
+
+def calculate_sum_boven_onder(folder: str | Path):
+    dict_boven_onder = {}
+    for file in glob.glob(f"{folder}/*"):
+        fn = Path(file)
+        if "onder" in str(fn):
+            location= "onder"
+        else:
+            location = "boven"
+            
+        name = fn.stem.split(f"_{location}")[0]
+        if name in dict_boven_onder.keys():
+            df = pd.read_csv(fn)
+            sum_df = pd.DataFrame(data = {"df1": dict_boven_onder[name][0]["score"], "df2": df.iloc[2:,0]})
+            sum_df["row_sum"] = sum_df.sum(axis =1)
+            
+            output = folder / f"{name}_sum.csv"
+            with open(output, "w", newline="") as f:
+                f.write("# Waarnemingssoort,begindatum,begintijd,tijdstap in minuten\n")
+                f.write(f"# {name} (mg/l)\n")
+                f.write("Q 2010-01-01 12:00 1440\n")
+                sum_df["row_sum"].to_csv(
+                    f, sep=" ", index=False, header=False, float_format="%.10g"
+                )  
+                
+            with open(output, "r") as f:
+                lines = f.readlines()
+
+            with open(output, "w") as f:
+                for line in lines:
+                    stripped = line.strip()
+
+                    # cases that produce ""
+                    if stripped == '""' or stripped == "":
+                        f.write("\n")
+
+                    else:
+                        f.write(line) 
+        else:
+            df = pd.read_csv(fn)
+            dict_boven_onder[name] = [pd.DataFrame(data = {"index": df.index[2:], "score": df.iloc[2:,0]})]        
+            
+    
 def process_aanvoer_chloride(fn_path: str | Path, output_fn: str | Path):
     """Get the aanvoer chloride
     Args:
@@ -19,6 +62,11 @@ def process_aanvoer_chloride(fn_path: str | Path, output_fn: str | Path):
         if file.endswith(".csv") and "IN" in file:
             fn = Path(file)
             name = fn.stem.split("cl_")[-1]
+            if "gemaal" in name or "pump" in name:
+                type = "Gemaal"
+            else:
+                type = "Debieten"
+                
             chloride_timeseries_df = pd.read_csv(file, sep=";")
             chloride_timeseries_df["WAARDE"] = chloride_timeseries_df[
                 "WAARDE"
@@ -34,7 +82,7 @@ def process_aanvoer_chloride(fn_path: str | Path, output_fn: str | Path):
 
             with open(output, "w", newline="") as f:
                 f.write("# Waarnemingssoort,begindatum,begintijd,tijdstap in minuten\n")
-                f.write(f"# Gemaal_{name} (mg/l)\n")
+                f.write(f"# {type}_{name} (mg/l)\n")
                 f.write("Q 2010-01-01 12:00 1440\n")
                 chloride_timeseries_df["WAARDE"].to_csv(
                     f, sep=" ", index=False, header=False, float_format="%.10g"
@@ -69,6 +117,10 @@ def process_afvoer_chloride(fn_path: str | Path, output_fn: str | Path):
         if file.endswith(".csv") and "OUT" in file:
             fn = Path(file)
             name = fn.stem.split("cl_")[-1]
+            if "gemaal" in name or "pump" in name:
+                type = "Gemaal"
+            else:
+                type = "Debieten"
             chloride_timeseries_df = pd.read_csv(file, sep=";")
             chloride_timeseries_df["WAARDE"] = chloride_timeseries_df[
                 "WAARDE"
@@ -86,20 +138,10 @@ def process_afvoer_chloride(fn_path: str | Path, output_fn: str | Path):
                 chloride_timeseries_df["WAARDE"].to_csv(
                     f, sep=" ", index=False, header=False, float_format="%.10g"
                 )
+                
+            calculate_sum_boven_onder(folder)  
 
-            with open(output, "r") as f:
-                lines = f.readlines()
-
-            with open(output, "w") as f:
-                for line in lines:
-                    stripped = line.strip()
-
-                    # cases that produce ""
-                    if stripped == '""' or stripped == "":
-                        f.write("\n")
-
-                    else:
-                        f.write(line) 
+    
 
 
 def process_chloride(fn_path: str | Path):
@@ -110,5 +152,5 @@ def process_chloride(fn_path: str | Path):
     config = Config.load()
     output_fn = config.output.output
 
-    #process_afvoer_chloride(fn_path, output_fn)
-    process_aanvoer_chloride(fn_path, output_fn)
+    process_afvoer_chloride(fn_path, output_fn)
+    #process_aanvoer_chloride(fn_path, output_fn)
