@@ -23,7 +23,7 @@ if __name__ == "__main__":
 
     # Prepare Pumps and Inlaat
     if balance: 
-        process_pumps(config.timeseries.input_balance, balance)
+        #process_pumps(config.timeseries.input_balance, balance)
         process_inlaat(config.timeseries.input_balance, balance)
     else:
         process_pumps(config.timeseries.pumps_wb, balance)  

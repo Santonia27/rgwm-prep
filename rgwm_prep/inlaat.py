@@ -56,6 +56,40 @@ def process_afvoer_inlaat(fn_path: str | Path, output_fn: str |Path, balance: bo
             f.write("* gap-filled TS\n")
             f.write("*DATUM WAARDE\n")
             inlaat_df.to_csv(f, sep=" ", index=False, header=False)
+            
+    # Sum Inlaat per WB --> used for Chloride concentration
+    inlaat_dict = {"wb_1": [],"wb_2": [], "wb_5": [],"wb_6": []}  
+    for file in os.listdir(folder):
+        name = file.split(".VZM")[0].split("Inlaat_")[-1]
+        name = name.split("_")[0] + "_" +  name.split("_")[1] 
+ 
+        if "wb_4" not in name and "wb_3" not in name:
+            inlaat_timeseries_df = pd.read_csv(os.path.join(folder,file), sep=" ", skiprows= 6)
+            inlaat_dict[name].append(inlaat_timeseries_df)
+            
+    for key, value in inlaat_dict.items():
+        df_combined = pd.concat(value, axis=1)
+        df_combined["WAARDE_sum"] = df_combined.loc[:, df_combined.columns == "WAARDE"].sum(axis=1)
+        inlaat_df["WAARDE"] = df_combined["WAARDE_sum"]
+        
+        output = folder / f"Inlaat_{key}_sum.VZM"
+
+        with open(output, "w") as f:
+            f.write(f"{key} inlaat {key} \n")
+            f.write(f"* {key} inlaat\n")
+            f.write("* Q in miljoen m3 per dag\n")
+            f.write("* period 2010 t/m 2018\n")
+            f.write(f"* {output}\n")
+            f.write("* gap-filled TS\n")
+            f.write("*DATUM WAARDE\n")
+            inlaat_df.to_csv(f, sep=" ", index=False, header=False)
+        
+
+        
+        
+        
+            
+             
 
 
 def process_inlaat(fn_path: str | Path, balance: bool):
