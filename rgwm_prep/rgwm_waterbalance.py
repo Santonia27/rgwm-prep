@@ -22,11 +22,11 @@ if __name__ == "__main__":
     #process_discharge(config.timeseries.discharge, balance)
 
     # Prepare Pumps and Inlaat
-    #if balance: 
-        #process_pumps(config.timeseries.pumps_balance, balance)
-    #    process_inlaat(config.timeseries.inlaat_balance)
-    #else:
-    #    process_pumps(config.timeseries.pumps_wb, balance)  
+    if balance: 
+        process_pumps(config.timeseries.input_balance, balance)
+        process_inlaat(config.timeseries.input_balance, balance)
+    else:
+        process_pumps(config.timeseries.pumps_wb, balance)  
         
 
     # Prepare flushing relationsfile #NOTE here I could create a text snippet for the relationship yaml and eventually write the whole yaml
@@ -42,10 +42,10 @@ if __name__ == "__main__":
     # )
     
     # Prepare chloride 
-    if balance: 
-        process_chloride(config.timeseries.pumps_balance, balance)
-    else:
-        process_chloride(config.timeseries.chloride, balance)
+    #if balance: 
+    #    process_chloride(config.timeseries.pumps_balance, balance)
+    #else:
+    #    process_chloride(config.timeseries.chloride, balance)
     
     
     # Prepare Berging

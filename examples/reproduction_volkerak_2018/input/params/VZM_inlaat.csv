@@ -1,17 +1,17 @@
 ﻿WB;Inlaat
-1;Inlaat_wb1_1
-1;Inlaat_wb1_2
-1;Inlaat_wb1_3
-1;Inlaat_wb1_4
-2;Inlaat-Deurloo
-2;Inlaat-OudKijkuit
-2;Inlaat-DrieGrotePolders
-2;Inlaat-VanHaaften
-3;Inlaat Campweg
-4;Inlaat gemaal Rilland
-5;Inlaat_wb5_1
-5;Inlaat_wb5_2
-5;Inlaat_wb5_3
-6;Inlaat_wb6_1
-6;Inlaat_wb6_2
-6;Inlaat_wb6_3
+1_1;Inlaat
+1_2;Inlaat
+1_3;Inlaat
+1_4;Inlaat
+2_2-2_4;Inlaat_Deurloo
+2_2-2_4;Inlaat_OudKijkuit
+2_1-2_3;Inlaat_Drie_Grote_Polders
+2_4-2_6-2_7;Inlaat_VanHaaften
+3_1;Inlaat_Campweg
+4_1;Inlaat_Rilland
+5_1;Inlaat
+5_2;Inlaat
+5_3;Inlaat
+6_1;Inlaat
+6_2;Inlaat
+6_3;Inlaat

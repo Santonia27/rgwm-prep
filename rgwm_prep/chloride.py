@@ -10,7 +10,7 @@ def get_sluis_value(fn_path: Path | str, idx: int, sluis: str):
     for dir in glob.glob(f"{fn_path}/*"):
             for file in os.listdir(dir):
                 filename = os.fsdecode(file)
-                if ("Chloride") not in filename and sluis in filename:          
+                if ("Chloride") not in filename and sluis in filename and "png" not in filename:          
                     with open(os.path.join(dir, file), 'r') as f:
                         first_line = f.readline()
                         if ";" in first_line:
@@ -85,7 +85,8 @@ def process_aanvoer_chloride(fn_path: str | Path, output_fn: str | Path, balance
                         type = "debieten"
                     else:
                         type = "gemaal"
-                    name = filename.split("Chloride_")[-1].split(".wb")[0]           
+                    name = filename.split("Chloride_")[-1].split(".wb")[0]
+                    wb =  filename.split(".wb")[-1].split(".csv")[0]        
                     with open(os.path.join(dir, file), 'r') as f:
                         first_line = f.readline()
                         if ";" in first_line:
@@ -100,10 +101,23 @@ def process_aanvoer_chloride(fn_path: str | Path, output_fn: str | Path, balance
                     if type == "debieten":
                         cl_df["WAARDE"] = cl_df["WAARDE"]/1000000
                     
+                    # Kreekrak has different calculation. If Sluis > 0, value = 0
+                    if "Kreekrak" in name:
+                        for idx, row in cl_df.iterrows():
+                            value = get_sluis_value(fn_path, idx, name.split("_IN")[0])
+                            if value > 0:
+                                value = 0
+                            else:
+                                value = cl_df.loc[idx, "WAARDE"] 
+                                if value < 0:
+                                    value = value * -1
+                                
+                            cl_df.loc[idx, "WAARDE"] = value
+                    
                     folder = output_fn / "in" / "cl_balance_input"
                     os.makedirs(folder, exist_ok=True)
                         
-                    output = folder / f"Cl_{name}.VZM"
+                    output = folder / f"Cl_{name}_wb{wb}.VZM"
 
                     with open(output, "w") as f:
                         f.write(f"{name}\n")
@@ -262,5 +276,5 @@ def process_chloride(fn_path: str | Path, balance: bool):
     config = Config.load()
     output_fn = config.output.output
 
-    process_afvoer_chloride(fn_path, output_fn, balance)
-    #process_aanvoer_chloride(fn_path, output_fn, balance)
+    #process_afvoer_chloride(fn_path, output_fn, balance)
+    process_aanvoer_chloride(fn_path, output_fn, balance)

@@ -2,7 +2,7 @@ De_Eendracht_IN
 * De_Eendracht_IN Cl gemaal
 * Chloride in kilo tons
 * period 2010 t/m 2018
-* examples\reproduction_volkerak_2018\output\in\cl_balance_input\Cl_De_Eendracht_IN.VZM
+* examples\reproduction_volkerak_2018\output\in\cl_balance_input\Cl_De_Eendracht_IN_wb2_2.csv.VZM
 * gap-filled TS
 *DATUM WAARDE
 20100101 0.0

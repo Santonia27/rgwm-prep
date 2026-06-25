@@ -4,10 +4,8 @@ discharge = "examples/reproduction_volkerak_2018/input/discharge"
 chloride= "examples/reproduction_volkerak_2018/input/chloride"
 pumps_wb = "examples/reproduction_volkerak_2018//input/pumps"
 inlaat_wb = "examples/reproduction_volkerak_2018//input/inlaat"
-pumps_balance = "P:/11212800-002/2. Calculations/rgwm_versie2.5.0/examples/VZM_incl_chloride/output"
-inlaat_balance = "P:/11212800-002/2. Calculations/rgwm_versie2.5.0/examples/VZM_incl_chloride/output"
+input_balance = "P:/11212800-002/2. Calculations/rgwm_versie2.5.0/examples/VZM_incl_chloride/output"
 pumps_wb_out = "examples/reproduction_volkerak_2018/input/params/VZM_pumps.csv"
-inlaat_wb_out = "examples/reproduction_volkerak_2018/input/params/VZM_inlaat.csv"
 params =  "examples/reproduction_volkerak_2018/input/params"
 
 [season]
