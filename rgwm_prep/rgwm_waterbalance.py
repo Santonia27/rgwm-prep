@@ -42,6 +42,11 @@ if __name__ == "__main__":
     # )
     
     # Prepare chloride 
-    process_chloride(config.timeseries.chloride)
+    if balance: 
+        process_chloride(config.timeseries.pumps_balance, balance)
+    else:
+        process_chloride(config.timeseries.chloride, balance)
+    
+    
     # Prepare Berging
     print("All input files were created.")
