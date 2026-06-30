@@ -36,6 +36,7 @@ def calculate_sum_boven_onder(folder: str | Path):
         if name in dict_boven_onder.keys():
             df = pd.read_csv(fn)
             sum_df = pd.DataFrame(data = {"df1": dict_boven_onder[name][0]["score"], "df2": df.iloc[2:,0]})
+            sum_df = sum_df.apply(pd.to_numeric, errors='coerce')
             sum_df["row_sum"] = sum_df.sum(axis =1)
             
             output = folder / f"{name}_sum.csv"
@@ -276,5 +277,5 @@ def process_chloride(fn_path: str | Path, balance: bool):
     config = Config.load()
     output_fn = config.output.output
 
-    #process_afvoer_chloride(fn_path, output_fn, balance)
-    process_aanvoer_chloride(fn_path, output_fn, balance)
+    process_afvoer_chloride(fn_path, output_fn, balance)
+    #process_aanvoer_chloride(fn_path, output_fn, balance)

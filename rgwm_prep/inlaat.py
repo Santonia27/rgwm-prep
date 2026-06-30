@@ -30,7 +30,7 @@ def process_afvoer_inlaat(fn_path: str | Path, output_fn: str |Path, balance: bo
         for file in os.listdir(dir):
             filename = os.fsdecode(file)
             name = "wb_" + dir.split("wb")[-1]
-            if ("Inlaat") in filename:                          
+            if ("Inlaat") in filename and "png" not in filename:                          
                 with open(os.path.join(dir, file), 'r') as f:
                     first_line = f.readline()
                     if ";" in first_line:
@@ -46,7 +46,8 @@ def process_afvoer_inlaat(fn_path: str | Path, output_fn: str |Path, balance: bo
         os.makedirs(folder, exist_ok=True)
             
         output = folder / f"Inlaat_{name}.VZM"
-
+        
+    
         with open(output, "w") as f:
             f.write(f"{name} inlaat {name} \n")
             f.write(f"* {name} inlaat\n")
@@ -56,7 +57,33 @@ def process_afvoer_inlaat(fn_path: str | Path, output_fn: str |Path, balance: bo
             f.write("* gap-filled TS\n")
             f.write("*DATUM WAARDE\n")
             inlaat_df.to_csv(f, sep=" ", index=False, header=False)
+        
+        if "wb_4" in name or "wb_3" in name:
             
+            output = folder / f"Inlaat_{name}.csv"
+            
+            with open(output, "w", newline="") as f:
+                f.write("# Waarnemingssoort,begindatum,begintijd,tijdstap in minuten\n")
+                f.write(f"# Inlaat_{name} (m3)\n")
+                f.write("Q 2010-01-01 12:00 1440\n")
+                inlaat_df["WAARDE"].to_csv(
+                    f, sep=" ", index=False, header=False, float_format="%.10g"
+                )
+
+            with open(output, "r") as f:
+                lines = f.readlines()
+
+            with open(output, "w") as f:
+                for line in lines:
+                    stripped = line.strip()
+
+                    # cases that produce ""
+                    if stripped == '""' or stripped == "":
+                        f.write("\n")
+
+                    else:
+                        f.write(line)
+                        
     # Sum Inlaat per WB --> used for Chloride concentration
     inlaat_dict = {"wb_1": [],"wb_2": [], "wb_5": [],"wb_6": []}  
     for file in os.listdir(folder):
@@ -69,20 +96,34 @@ def process_afvoer_inlaat(fn_path: str | Path, output_fn: str |Path, balance: bo
             
     for key, value in inlaat_dict.items():
         df_combined = pd.concat(value, axis=1)
+        #sum_df = sum_df.apply(pd.to_numeric, errors='coerce')
         df_combined["WAARDE_sum"] = df_combined.loc[:, df_combined.columns == "WAARDE"].sum(axis=1)
         inlaat_df["WAARDE"] = df_combined["WAARDE_sum"]
         
-        output = folder / f"Inlaat_{key}_sum.VZM"
+        output = folder / f"Inlaat_{key}_sum.csv"
+
+
+        with open(output, "w", newline="") as f:
+            f.write("# Waarnemingssoort,begindatum,begintijd,tijdstap in minuten\n")
+            f.write(f"# Inlaat_{key} (m3)\n")
+            f.write("Q 2010-01-01 12:00 1440\n")
+            inlaat_df["WAARDE"].to_csv(
+                f, sep=" ", index=False, header=False, float_format="%.10g"
+            )
+
+        with open(output, "r") as f:
+            lines = f.readlines()
 
         with open(output, "w") as f:
-            f.write(f"{key} inlaat {key} \n")
-            f.write(f"* {key} inlaat\n")
-            f.write("* Q in miljoen m3 per dag\n")
-            f.write("* period 2010 t/m 2018\n")
-            f.write(f"* {output}\n")
-            f.write("* gap-filled TS\n")
-            f.write("*DATUM WAARDE\n")
-            inlaat_df.to_csv(f, sep=" ", index=False, header=False)
+            for line in lines:
+                stripped = line.strip()
+
+                # cases that produce ""
+                if stripped == '""' or stripped == "":
+                    f.write("\n")
+
+                else:
+                    f.write(line)
         
 
         
