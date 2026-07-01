@@ -58,7 +58,7 @@ def process_afvoer_inlaat(fn_path: str | Path, output_fn: str |Path, balance: bo
             f.write("*DATUM WAARDE\n")
             inlaat_df.to_csv(f, sep=" ", index=False, header=False)
         
-        if "wb_4" in name or "wb_3" in name:
+        if "wb_4" in name or "wb_3" in name or "wb_6":
             
             output = folder / f"Inlaat_{name}.csv"
             
@@ -107,7 +107,7 @@ def process_afvoer_inlaat(fn_path: str | Path, output_fn: str |Path, balance: bo
             f.write("# Waarnemingssoort,begindatum,begintijd,tijdstap in minuten\n")
             f.write(f"# Inlaat_{key} (m3)\n")
             f.write("Q 2010-01-01 12:00 1440\n")
-            inlaat_df["WAARDE"].to_csv(
+            inlaat_df["WAARDE"].loc[1:].to_csv(
                 f, sep=" ", index=False, header=False, float_format="%.10g"
             )
 

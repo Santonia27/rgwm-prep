@@ -135,21 +135,37 @@ def process_berging(fn_path: str | Path, output_fn: str | Path):
             berging_timeseries_df = pd.read_csv(file, sep=";")
             # Convert datetime format
             berging_timeseries_df = convert_datetime(berging_timeseries_df)
+            
+            #Convert to volume 
+            if "Cl" not in file:
+                berging_timeseries_df["WAARDE"] = 317 + (berging_timeseries_df["WAARDE"] - 0.09) * 6000 / 100
+                # Save .VZM input file
+                output = output_fn / "berging.VZM"
 
-            # Save .VZM input file
-            output = output_fn / "VZM_berging.VZM"
+                with open(output, "w") as f:
+                    f.write("berging VZM\n")
+                    f.write('"* Rijkswaterstaat RDIJ, berging  VZM"\n')
+                    f.write(
+                        "* Berging Markermeer in milj. m3 op basis van Gew. gem. waterhoogte van VZM locaties in cm t.o.v. NAP\n"
+                    )
+                    f.write("* period 2010 t/m 2018\n")
+                    f.write("* \any\dummy\path\VZM_berging.vzm\n")
+                    f.write('"* post VZM, afvoerpost % van aanvoer"\n')
+                    f.write("*DATUM WAARDE\n")
+                    berging_timeseries_df.to_csv(f, sep=" ", index=False, header=False)
+            else:
+                output = output_fn / "Cl_berging.VZM"
 
-            with open(output, "w") as f:
-                f.write("Berging VZM\n")
-                f.write('"* Rijkswaterstaat RDIJ, berging  VZM"\n')
-                f.write(
-                    "* Berging Markermeer in milj. m3 op basis van Gew. gem. waterhoogte van VZM locaties in cm t.o.v. NAP\n"
-                )
-                f.write("* period 2010 t/m 2018\n")
-                f.write("* VZM_berging.vzm\n")
-                f.write('"* post VZM, afvoerpost % van aanvoer"\n')
-                f.write("*DATUM WAARDE\n")
-                berging_timeseries_df.to_csv(f, sep=" ", index=False, header=False)
+                with open(output, "w") as f:
+                    f.write("Berging VZM\n")
+                    f.write("* Cl berging VZM\n")
+                    f.write("* Chloride in mg/l\n")
+                    f.write("* period 2010 t/m 2018\n")
+                    f.write("* \any\dummy\path\VZM_berging.vzm\n")
+                    f.write("* post VZM, afvoerpost % van aanvoer\n")
+                    f.write("*DATUM WAARDE\n")
+                    berging_timeseries_df.to_csv(f, sep=" ", index=False, header=False)
+                
 
 
 def process_discharge(fn_path: str | Path, balance:bool):
@@ -160,6 +176,6 @@ def process_discharge(fn_path: str | Path, balance:bool):
     config = Config.load()
     output_fn = config.output.output
 
-    process_afvoer_discharge(fn_path, output_fn, balance)
-    process_aanvoer_discharge(fn_path, output_fn, balance)
+    #process_afvoer_discharge(fn_path, output_fn, balance)
+    #process_aanvoer_discharge(fn_path, output_fn, balance)
     process_berging(fn_path, output_fn)

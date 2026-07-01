@@ -1,6 +1,7 @@
-﻿Constante fluxen;m3/d;richting;opmerking
-Lekverlies Krammer DVS1+2;34560;IN;getij, zout, gemiddeld 2 cm peilverschil
-Lekverlies Krammer JS1+2;17280;IN;getij, zout, gemiddeld 2 cm peilverschil
-Volkerak lekverlies DVS1+2+3;103680;IN;beetje getij, zoet,gemiddeld 50 cm peilverschil
-Volkerak lekverlies JS1;25920;IN;beetje getij, zoet,gemiddeld 50 cm peilverschil
-Bathse spuisluis lekverlies;6000;IN;berekend op basis van zoutgehalteverandering bij niet spuien
+﻿Constante fluxen;m3/d;richting;cl_conc;opmerking
+Lekverlies Krammer DVS1+2;34560;IN;10000;getij, zout, gemiddeld 2 cm peilverschil
+Lekverlies Krammer JS1+2;17280;IN;10000;getij, zout, gemiddeld 2 cm peilverschil
+Volkerak lekverlies DVS1+2+3;103680;IN;75;beetje getij, zoet,gemiddeld 50 cm peilverschil
+Volkerak lekverlies JS1;25920;IN;75;beetje getij, zoet,gemiddeld 50 cm peilverschil
+Bathse spuisluis lekverlies;6000;IN;10000;berekend op basis van zoutgehalteverandering bij niet spuien
+Bergsediep lekverlies;8640;IN;10000;

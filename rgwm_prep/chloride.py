@@ -23,7 +23,7 @@ def get_sluis_value(fn_path: Path | str, idx: int, sluis: str):
                     return value
     
 
-def calculate_sum_boven_onder(folder: str | Path):
+def calculate_average_boven_onder(folder: str | Path):
     dict_boven_onder = {}
     for file in glob.glob(f"{folder}/*"):
         fn = Path(file)
@@ -38,13 +38,14 @@ def calculate_sum_boven_onder(folder: str | Path):
             sum_df = pd.DataFrame(data = {"df1": dict_boven_onder[name][0]["score"], "df2": df.iloc[2:,0]})
             sum_df = sum_df.apply(pd.to_numeric, errors='coerce')
             sum_df["row_sum"] = sum_df.sum(axis =1)
+            sum_df["row_average"] = sum_df["row_sum"] / 2
             
-            output = folder / f"{name}_sum.csv"
+            output = folder / f"{name}_average.csv"
             with open(output, "w", newline="") as f:
                 f.write("# Waarnemingssoort,begindatum,begintijd,tijdstap in minuten\n")
                 f.write(f"# {name} (mg/l)\n")
                 f.write("Q 2010-01-01 12:00 1440\n")
-                sum_df["row_sum"].to_csv(
+                sum_df["row_average"].to_csv(
                     f, sep=" ", index=False, header=False, float_format="%.10g"
                 )  
                 
@@ -190,9 +191,12 @@ def process_afvoer_chloride(fn_path: str | Path, output_fn: str | Path, balance:
         for dir in glob.glob(f"{fn_path}/*"):
             for file in os.listdir(dir):
                 filename = os.fsdecode(file)
+                wb =  filename.split(".wb")[-1].split(".csv")[0]  
                 if ("Chloride") in filename and "OUT" in filename:
                     if "sluis" in filename:
                         type = "debieten"
+                    elif "inlaat" in filename:
+                        type = "inlaat"
                     else:
                         type = "gemaal"
                     name = filename.split("Chloride_")[-1].split(".wb")[0]                               
@@ -207,8 +211,8 @@ def process_afvoer_chloride(fn_path: str | Path, output_fn: str | Path, balance:
         
                     cl_df = pd.DataFrame(data = {"DATUM": cl_timeseries_df["time"], "WAARDE": cl_timeseries_df[" salinity"]})
                     cl_df = convert_datetime(cl_df, balance, sep)
-                    if type == "debieten":
-                        cl_df["WAARDE"] = cl_df["WAARDE"]/1000000000
+                    if type == "debieten" or type == "inlaat": 
+                        cl_df["WAARDE"] = cl_df["WAARDE"]/1000000
                     
                     # Bovensas and Dintelsas have different calculation. If Sluis > 0, value = 0
                     if "Bovensas" in name or "Dintelsas" in name:
@@ -226,7 +230,7 @@ def process_afvoer_chloride(fn_path: str | Path, output_fn: str | Path, balance:
                     folder = output_fn / "out" / "cl_balance_input"
                     os.makedirs(folder, exist_ok=True)
                         
-                    output = folder / f"Cl_{name}.VZM"
+                    output = folder / f"Cl_{name}_wb_{wb}.VZM"
 
                     with open(output, "w") as f:
                         f.write(f"{name}\n")
@@ -264,7 +268,7 @@ def process_afvoer_chloride(fn_path: str | Path, output_fn: str | Path, balance:
                         f, sep=" ", index=False, header=False, float_format="%.10g"
                     )
                     
-                calculate_sum_boven_onder(folder)  
+                calculate_average_boven_onder(folder)  
 
     
 
@@ -278,4 +282,4 @@ def process_chloride(fn_path: str | Path, balance: bool):
     output_fn = config.output.output
 
     process_afvoer_chloride(fn_path, output_fn, balance)
-    #process_aanvoer_chloride(fn_path, output_fn, balance)
+    process_aanvoer_chloride(fn_path, output_fn, balance)

@@ -27,15 +27,22 @@ def process_leakage(
         leackage_df["richting"].str.contains("out", case=False, na=False), "m3/d"
     ] *= -1
 
+    leackage_df["cl"] = (
+        leackage_df["m3/d"] * leackage_df["cl_conc"] / 1000000000
+    )
     timeseries_df = pd.read_csv(fn_params / "date_timeseries.csv")
     sum = leackage_df["m3/d"].sum(axis=0) / 1000000
-
+   
+    cl_sum = leackage_df["cl"].sum(axis=0)
+    
     # Convert datetime
     timeseries_df = convert_datetime(timeseries_df, balance,"" )
 
     # Create leackage df
-    leackage_df = timeseries_df
-    leackage_df["WAARDE"] = sum
+    leackage_df = timeseries_df.copy()
+    cl_leackage= timeseries_df.copy()
+    
+    leackage_df["WAARDE"] = sum   
 
     # Save .VZM input file
     output = output_fn / "in" /"VZM_leackage.VZM"
@@ -49,6 +56,21 @@ def process_leakage(
         f.write("* cumulative\n")
         f.write("*DATUM WAARDE\n")
         leackage_df.to_csv(f, sep=" ", index=False, header=False)
+
+    # Save .VZM input file
+    output = output_fn / "in" /"Cl_VZM_leackage.VZM"
+    
+    cl_leackage["WAARDE"] = cl_sum
+    
+    with open(output, "w") as f:
+        f.write("Chloride Leakage\n")
+        f.write("* Leakage\n")
+        f.write("* Leackage miljoen m3 per dag\n")
+        f.write("* period 2010 t/m 2018\n")
+        f.write("* Lek\n")
+        f.write("* cumulative\n")
+        f.write("*DATUM WAARDE\n")
+        cl_leackage.to_csv(f, sep=" ", index=False, header=False)
 
 
 # Lock operations
@@ -74,18 +96,40 @@ def process_lock_operations(
         lock_operations_df["richting"].str.contains("UIT", case=False, na=False), "m3/d"
     ] *= -1
 
+    
+    lock_operations_df["cl"] = (
+        lock_operations_df["m3/d"] * lock_operations_df["cl_conc"] / 1000000000
+    )
+
+    
     timeseries_df = pd.read_csv(fn_params / "date_timeseries.csv")
     sum = lock_operations_df["m3/d"].sum(axis=0) / 1000000
+    cl_sum = lock_operations_df["cl"].sum(axis=0)
 
     # Convert datetime
     timeseries_df = convert_datetime(timeseries_df, balance, "")
 
     # Create leackage df
-    lock_operations_df = timeseries_df
-    lock_operations_df["WAAARDE"] = sum
+    lock_operations_df = timeseries_df.copy()
+    cl_lock_operations_df= timeseries_df.copy()
+    lock_operations_df["WAARDE"] = sum
+    cl_lock_operations_df["WAARDE"] = cl_sum
     
     # Save .VZM input file
     output = output_fn / "in" /"VZM_lock_operations.VZM"
+
+    with open(output, "w") as f:
+        f.write("Chloride lock_operations\n")
+        f.write("* lock_operations\n")
+        f.write("* lock_operations miljoen m3 per dag\n")
+        f.write("* period 2010 t/m 2018\n")
+        f.write("* Schutten\n")
+        f.write("* cumulative\n")
+        f.write("*DATUM WAARDE\n")
+        lock_operations_df.to_csv(f, sep=" ", index=False, header=False)
+    
+        # Save .VZM input file
+    output = output_fn / "in" /"CL_VZM_lock_operations.VZM"
 
     with open(output, "w") as f:
         f.write("lock_operations\n")
@@ -95,7 +139,7 @@ def process_lock_operations(
         f.write("* Schutten\n")
         f.write("* cumulative\n")
         f.write("*DATUM WAARDE\n")
-        lock_operations_df.to_csv(f, sep=" ", index=False, header=False)
+        cl_lock_operations_df.to_csv(f, sep=" ", index=False, header=False)
 
 
 # Upwards groundwater fluxes
@@ -122,15 +166,24 @@ def process_up_grndwater_flux(
         "m3/d",
     ] *= -1
 
+    up_grndwater_flux_df["cl"] = (
+        up_grndwater_flux_df["m3/d"] * up_grndwater_flux_df["cl_conc"] / 1000000000
+    )
+    
     timeseries_df = pd.read_csv(fn_params / "date_timeseries.csv")
     sum = up_grndwater_flux_df["m3/d"].sum(axis=0) / 1000000
-
+    cl_sum = up_grndwater_flux_df["cl"].sum(axis=0)
+    
     # Convert datetime
     timeseries_df = convert_datetime(timeseries_df, balance, "")
 
     # Create leackage df
-    up_grndwater_flux_df = timeseries_df
-    up_grndwater_flux_df["WAAARDE"] = sum
+    up_grndwater_flux_df = timeseries_df.copy()
+    up_grndwater_flux_df["WAARDE"] = sum
+    
+    cl_up_grndwater_flux_df= timeseries_df.copy()
+    cl_up_grndwater_flux_df["WAARDE"] = cl_sum
+    
         # Save .VZM input file
     output = output_fn / "in" / "VZM_groundwater_fluxes.VZM"
 
@@ -143,6 +196,19 @@ def process_up_grndwater_flux(
         f.write("* cumulative\n")
         f.write("*DATUM WAARDE\n")
         up_grndwater_flux_df.to_csv(f, sep=" ", index=False, header=False)
+
+        # Save .VZM input file
+    output = output_fn / "in" / "Cl_VZM_groundwater_fluxes.VZM"
+
+    with open(output, "w") as f:
+        f.write("Up groundwater fluxes\n")
+        f.write("* Up groundwater fluxes\n")
+        f.write("* Up groundwater fluxes miljoen m3 per dag\n")
+        f.write("* period 2010 t/m 2018\n")
+        f.write("* Kwell\n")
+        f.write("* cumulative\n")
+        f.write("*DATUM WAARDE\n")
+        cl_up_grndwater_flux_df.to_csv(f, sep=" ", index=False, header=False)
 
 
 def process_const_fluxes(
